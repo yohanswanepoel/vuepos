@@ -1,5 +1,7 @@
 import ProductComponent from './components/product.js';
 import ProductViewComponent from './components/listproducts.js'
+import POSSaleComponent from './components/sale.js'
+
 import store from './components/vuexstate.js'
 
 var db = new PouchDB('swanpos');
@@ -12,7 +14,7 @@ var db = new PouchDB('swanpos');
 
 
   const routes = [
-    { name: 'newSale', path: '/newSale', component: NewSale },
+    { name: 'newSale', path: '/newSale', component: POSSaleComponent },
     { name: 'listSales', path: '/listSales', component: ListSales },
     { name: 'newProduct', path: '/newProduct', component: ProductComponent, props: { header : 'Create New Product' } },
     { name: 'listProducts', path: '/listProducts', component: ProductViewComponent },

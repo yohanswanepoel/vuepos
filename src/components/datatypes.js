@@ -22,8 +22,9 @@ export let ProductTemplate = {
 export let SaleItemTemplate = {
       "row": null,
       "productId":null,
+      "name":"",
       "quantity": null,
-      "sale_price":null,
+      "salePrice":null,
       "discount":null
   };
 
