@@ -1,0 +1,32 @@
+[
+    {
+        "_id": "product:cheese",
+        "type": "product",
+        "version": 1,
+        "shortName": "Cheese",
+        "title": "Cheese",
+        "price": 2,
+        "costPrice": 1,
+        "discount": 0,
+        "salesTax": 0.1,
+        "createdAt": "",
+        "updatedAt": "",
+        "createdBy": "",
+        "updated_by": ""
+      },
+      {
+        "_id": "product:chalk",
+        "type": "product",
+        "version": 1,
+        "shortName": "Chalk",
+        "title": "Chalk",
+        "price": 2,
+        "costPrice": 1,
+        "discount": 0,
+        "salesTax": 0.1,
+        "createdAt": "",
+        "updatedAt": "",
+        "createdBy": "",
+        "updated_by": ""
+      }
+]
