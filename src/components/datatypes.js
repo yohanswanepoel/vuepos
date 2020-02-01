@@ -27,7 +27,8 @@ export let SaleItemTemplate = {
       "discount":null
   };
 
-  // ID convention: type:??
+  // ID convention: type:yearmonthdayhourminutesecond:total:tender
+  // Tender - cash/card
 export let SaleTemplate = {
     "_id": "",
     "type": "sale",
@@ -36,6 +37,7 @@ export let SaleTemplate = {
     "tender": null,
     "discount": null,
     "salesTaxTotal": null,
+    "tender":"",
     "itemLIst": [],
     "createdAt": "",
     "updatedAt": "",
