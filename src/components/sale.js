@@ -97,7 +97,7 @@ export default {
             <div class="modal-body">
               <div class="form-group">
                 <label for="title">Charges $</label>
-                <input v-model="sale.total" type="number" class="form-control" id="title" placeholder="Charges" readonly>
+                <input v-model="sale.total" type="number" class="form-control" id="title2" placeholder="Charges" readonly>
               </div>
             </div>
             <div class="modal-footer">
