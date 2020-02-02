@@ -16,57 +16,63 @@ export default {
     <div>
       <form id="product">
         <h3>{{ header }}</h3>
-        <div class="form-group">
-          <label for="shortName">Unique Name</label>
-          <input v-if="updateProduct" v-model="product.shortName" type="text" class="form-control" id="shortName" placeholder="Enter unique product name" readonly>
-          <input v-if="newProduct" v-model="product.shortName" type="text" class="form-control" id="shortName" placeholder="Enter unique product name">
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="shortName">Unique Name</label>
+              <input v-if="updateProduct" v-model="product.shortName" type="text" class="form-control" id="shortName" placeholder="Enter unique product name" readonly>
+              <input v-if="newProduct" v-model="product.shortName" type="text" class="form-control" id="shortName" placeholder="Enter unique product name">
+            </div>
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input v-model="product.title" type="text" class="form-control" id="title" placeholder="Product Title">
+            </div>
+            <div class="form-group">
+              <label for="group">Group</label>
+              <select v-model="product.group" class="form-control" id="group">
+                <option>Hot Food</option>
+                <option>Cold Food</option>
+                <option>Drinks</option>
+                <option>Treats</option>
+                <option>Value Packs</option>
+                <option>Snacks</option>
+              </select>
+            </div>
+            <p v-if="errors.length" class="alert alert-danger" role="alert">
+              <b>Please correct the following error(s):</b>
+              <ul>
+                <li v-for="error in errors">{{ error }}</li>
+              </ul>
+            </p>
+            <p v-if="messages.length" class="alert alert-success" role="alert">
+              <b>Please correct the following error(s):</b>
+              <ul>
+                <li v-for="message in messages">{{ message }}</li>
+              </ul>
+            </p>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="price">Sell Price</label>
+              <input v-model="product.price" type="number" class="form-control" id="price" placeholder="0.0">
+            </div>
+            <div class="form-group">
+              <label for="costprice">Cost Price</label>
+              <input v-model="product.costPrice" type="number" class="form-control" id="costprice" placeholder="0.0">
+            </div>
+            <div class="form-group">
+              <label for="salestax">Sales Tax</label>
+              <input v-model="product.salesTax" type="number" class="form-control" id="salestax" placeholder="0.0">
+            </div>
+            <div class="form-group">
+              <label for="discount">Discount</label>
+              <input v-model="product.discount" type="number" class="form-control" id="discount" placeholder="0.0">
+            </div>
+            <button type="button" class="btn btn-primary" v-on:click="saveProduct()">Submit</button>
+            <button type="button" class="btn btn-primary" v-on:click="displayDBInfo()">DB Info</button>
+            <button type="button" class="btn btn-primary" v-on:click="clearDB()">DB Info</button>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="title">Title</label>
-          <input v-model="product.title" type="text" class="form-control" id="title" placeholder="Product Title">
-        </div>
-        <div class="form-group">
-          <label for="group">Group</label>
-          <select v-model="product.group" class="form-control" id="group">
-            <option>Hot Food</option>
-            <option>Cold Food</option>
-            <option>Drinks</option>
-            <option>Treats</option>
-            <option>Value Packs</option>
-            <option>Snacks</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="price">Sell Price</label>
-          <input v-model="product.price" type="text" class="form-control" id="price" placeholder="0.0">
-        </div>
-        <div class="form-group">
-          <label for="costprice">Cost Price</label>
-          <input v-model="product.costPrice" type="text" class="form-control" id="costprice" placeholder="0.0">
-        </div>
-        <div class="form-group">
-          <label for="salestax">Sales Tax</label>
-          <input v-model="product.salesTax" type="text" class="form-control" id="salestax" placeholder="0.0">
-        </div>
-        <div class="form-group">
-          <label for="discount">Discount</label>
-          <input v-model="product.discount" type="text" class="form-control" id="discount" placeholder="0.0">
-        </div>
-        <p v-if="errors.length" class="alert alert-danger" role="alert">
-          <b>Please correct the following error(s):</b>
-          <ul>
-            <li v-for="error in errors">{{ error }}</li>
-          </ul>
-        </p>
-        <p v-if="messages.length" class="alert alert-success" role="alert">
-          <b>Please correct the following error(s):</b>
-          <ul>
-            <li v-for="message in messages">{{ message }}</li>
-          </ul>
-        </p>
-        <button type="button" class="btn btn-primary" v-on:click="saveProduct()">Submit</button>
-        <button type="button" class="btn btn-primary" v-on:click="displayDBInfo()">DB Info</button>
-        <button type="button" class="btn btn-primary" v-on:click="clearDB()">DB Info</button>
       </form>
     </div>
     `,

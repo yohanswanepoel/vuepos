@@ -41,20 +41,32 @@
     <script src="src/pouchdb-7.1.1.min.js"></script>
 </head>
 <body>
-    <div class="container" id="app">
-        <div class="row">
-            <div class="col-3 col_links">
-                <div class="list-group list-group-flush" name="mylist" role="list">
-                    <router-link class="list-group-item list-group-item-action litem-js" to="/newSale">New Sale</router-link>
-                    <router-link class="list-group-item list-group-item-action litem-js" to="/listSales">List Sales</router-link>
-                    <router-link class="list-group-item list-group-item-action litem-js" to="/newProduct">New Product</router-link>
-                    <router-link class="list-group-item list-group-item-action litem-js" to="/listProducts">List Products</router-link>
-                </div>
+    <div id="app">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #e3f2fd;">
+            <a class="navbar-brand" href="#">Canteen POS</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                    <router-link class="nav-item nav-link" to="/newSale">New Sale</router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link class="nav-item nav-link" to="/listSales">List Sales</router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link class="nav-item nav-link" to="/newProduct">New Product</router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link class="nav-item nav-link" to="/listProducts">List Products</router-link>
+                </li>
+              </ul>
             </div>
-            <div class="col-8">
-                <router-view></router-view>
-            </div>
-        </div>
+          </nav>
+          <div class="container"> 
+            <router-view></router-view>
+          </div>
     </div>
     
     <script src="src/swanpos.js" type="module"></script>
