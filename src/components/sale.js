@@ -63,6 +63,17 @@ export default {
               <button v-if="sale"   type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#cardPay">Card</button>
               <button type="button" class="btn btn-danger btn-block" v-on:click="cancel()">Cancel</button>
             </div>
+            <p v-if="errors.length" class="alert alert-danger" role="alert">
+              <b>Please correct the following error(s):</b>
+              <ul>
+                <li v-for="error in errors">{{ error }}</li>
+              </ul>
+            </p>
+            <p v-if="messages.length" class="alert alert-success" role="alert">
+              <ul>
+                <li v-for="message in messages">{{ message }}</li>
+              </ul>
+            </p>
           </div>
         </div> 
       </div>
@@ -127,10 +138,43 @@ export default {
     </div>
     `,
     methods:{
-      generatedSaleId(date, tender){
+      generatedSaleId(date){
           // ID convention: type:yearmonthdayhourminutesecond:total:tender
-          var dateStr = date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
-          return "sale" + ":" + dateStr + ":" + sale.total + ":" + tender; 
+          var dateStr = date.getFullYear() + "" + (date.getMonth() + 1) + "" + date.getDate() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
+          return "sale" + ":" + dateStr + ":" + this.sale.total; 
+      },
+      createSaleItem(tenderType){
+        var db = this.$store.db;
+        var date = new Date();
+        this.sale._id = this.generatedSaleId(date);
+        this.sale.tender = tenderType
+        var date = new Date()
+        let i = 0;
+        for (i = 0; i < this.items.length; i++){
+          this.items[i]._id = "item:"+this.sale._id + ":" + this.items[i].productId;
+          
+        }
+        // Add the Sale document to the items array for a bulk insert
+        var insertDocs = this.items.concat(this.sale);
+        var self = this;
+        db.bulkDocs(
+          insertDocs
+        ).then(function(result){
+            self.items = [];
+            self.sale = null;
+            self.messages.push("Successfully Updated");
+            setTimeout(function(){
+               self.messages = []; 
+              }, 3000);
+          }
+        ).catch(function(err){
+            self.errors.push("Save Failed");
+          }
+        )
+        //item:sale._id:productId
+
+
+        
       },
       caculateChange(){
         this.change = parseFloat(this.sale.tender) - this.sale.total;
@@ -141,16 +185,11 @@ export default {
         this.sale = null;
       },
       cashPay(){
-        var date = new Date();
-        this.sale.id = this.generatedSaleId();
-        this.items = [];
-        this.sale = null;
+        this.createSaleItem("cash");
       },
       cardPay(){
-        var date = new Date();
-        this.sale.id = this.generatedSaleId();
-        this.items = [];
-        this.sale = null;
+        this.sale.tender = this.sale.total;
+        this.createSaleItem("eftpos")
       },
       removeItem(productId){
         for (var i = 0; i < this.items.length; i++){
@@ -194,8 +233,11 @@ export default {
           item.discount = product.discount;
           item.productId = product._id;
           item.quantity = 1;
-          item.salePrice = product.price;
+          item.salePrice = parseFloat(product.price).toFixed(2);
           item.name = product.shortName;
+          var date = new Date()
+          item.createdAt = date.toJSON();
+          item.createdBy = this.$store.user;
           this.items.push(item);  
         }
       },
@@ -212,8 +254,8 @@ export default {
         endkey: "product\ufff0"
       }).then(function(result){
         self.products = result.rows;
-        console.log(self.products);
-        console.log(self.products[0].doc._id);
+        //console.log(self.products);
+        //console.log(self.products[0].doc._id);
       }).catch(function(err){
         console.log(err);
       })
@@ -227,16 +269,16 @@ export default {
         var i = 0;
         var j = -1;
         var group = "";
-        console.log("Computed");
-        console.log(self.products.length)
+        //console.log("Computed");
+        //console.log(self.products.length)
         for (i = 0; i < self.products.length; i++){
           // New group 
-          console.log(self.products[i].doc._id);
+          //console.log(self.products[i].doc._id);
           if (self.products[i].doc.group != group){
             j++
             group = self.products[i].doc.group;
             groupedProducts[j] = {group: group, items: []};
-            console.log(group);
+            //console.log(group);
           }
           groupedProducts[j].items.push(self.products[i].doc);
         }

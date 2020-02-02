@@ -18,14 +18,18 @@ export let ProductTemplate = {
 
   // This could be a separate document but it does not change
   // If not it would use some couchdb magic here with generated IDs
-  // If this was using couch maging then it would beID defaultSale._id:type:row 
+  // If this was using couch maging then it would be: ID item:sale._id:productId 
 export let SaleItemTemplate = {
-      "row": null,
+      "_id": null,
       "productId":null,
       "name":"",
       "quantity": null,
       "salePrice":null,
-      "discount":null
+      "discount":null,
+      "createdAt": "",
+      "updatedAt": "",
+      "createdBy": "",
+      "updated_by": ""
   };
 
   // ID convention: type:yearmonthdayhourminutesecond:total:tender
@@ -39,7 +43,6 @@ export let SaleTemplate = {
     "discount": null,
     "salesTaxTotal": null,
     "tender":"",
-    "itemLIst": [],
     "createdAt": "",
     "updatedAt": "",
     "createdBy": "",

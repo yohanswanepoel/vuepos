@@ -45,7 +45,6 @@ export default {
               </ul>
             </p>
             <p v-if="messages.length" class="alert alert-success" role="alert">
-              <b>Please correct the following error(s):</b>
               <ul>
                 <li v-for="message in messages">{{ message }}</li>
               </ul>
