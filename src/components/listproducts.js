@@ -16,15 +16,15 @@ export default {
       <table class="table table-striped table-hover  table-sm">
         <thead>
           <tr>
-            <th scope="col">Short Name</th>
-            <th scope="col">Title</th>
+            <th scope="col" colspan="1">Short Name</th>
+            <th scope="col" colspan="3">Title</th>
             <th scope="col">Price</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in products" class="litem-js" v-on:click="rowclicked(item.doc)">
-            <td>{{ item.doc.shortName }}</td>
-            <td>{{ item.doc.title }}</td>
+          <tr v-for="item in products" v-on:click="rowclicked(item.doc)">
+            <td colspan="1">{{ item.doc.shortName }}</td>
+            <td colspan="3">{{ item.doc.title }}</td>
             <td>{{ item.doc.price }}</td>
           </tr>
         </tbody>
@@ -34,7 +34,7 @@ export default {
     methods:{
       rowclicked(product){
         // This ensures promises do not get messed up
-        console.log(product.shortName);
+        //console.log(product.shortName);
         this.$router.push({ name: 'editProduct', params: { id: product._id, heading: 'Edit Product' } })
 
       },
@@ -51,8 +51,8 @@ export default {
         endkey: "product\ufff0"
       }).then(function(result){
         self.products = result.rows;
-        console.log(self.products);
-        console.log(self.products[0].doc._id);
+        //console.log(self.products);
+        //console.log(self.products[0].doc._id);
       }).catch(function(err){
         console.log(err);
       })

@@ -38,6 +38,10 @@ export default {
                 <option>Snacks</option>
               </select>
             </div>
+            <div class="form-group">
+              <label for="price">Sell Price</label>
+              <input v-model="product.price" type="number" class="form-control" id="price" placeholder="0.0">
+            </div>
             <p v-if="errors.length" class="alert alert-danger" role="alert">
               <b>Please correct the following error(s):</b>
               <ul>
@@ -52,10 +56,6 @@ export default {
           </div>
           <div class="col">
             <div class="form-group">
-              <label for="price">Sell Price</label>
-              <input v-model="product.price" type="number" class="form-control" id="price" placeholder="0.0">
-            </div>
-            <div class="form-group">
               <label for="costprice">Cost Price</label>
               <input v-model="product.costPrice" type="number" class="form-control" id="costprice" placeholder="0.0">
             </div>
@@ -67,9 +67,9 @@ export default {
               <label for="discount">Discount</label>
               <input v-model="product.discount" type="number" class="form-control" id="discount" placeholder="0.0">
             </div>
-            <button type="button" class="btn btn-primary" v-on:click="saveProduct()">Submit</button>
-            <button type="button" class="btn btn-primary" v-on:click="displayDBInfo()">DB Info</button>
-            <button type="button" class="btn btn-primary" v-on:click="clearDB()">DB Info</button>
+            <button type="button" class="btn btn-warning btn-block" v-on:click="cancel()">Cancel</button>
+            <button type="button" class="btn btn-primary btn-block" v-on:click="saveProduct()">Save</button>
+            <button v-if="updateProduct" type="button" class="btn btn-danger btn-block" v-on:click="displayDBInfo()">Delete</button>
           </div>
         </div>
       </form>
@@ -85,7 +85,7 @@ export default {
         if (pid != null){
            // This is an update
             db.get(pid).then(function (doc) {
-              console.log(doc);
+              //console.log(doc);
               self.product = doc;
             }).catch(function (err) {
               self.errors.push(err.status);
@@ -103,6 +103,9 @@ export default {
         var db = this.$store.db;
         // This ensures promises do not get messed up
         var self = this;
+      },
+      cancel(){
+        window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/');
       },
       displayDBInfo() {
         var db = this.$store.db;
@@ -155,7 +158,7 @@ export default {
             self.messages.push( "Successfully saved");
           }).catch(function (err){
             if (err.status == "409"){
-              console.log(self.product._id);
+              //console.log(self.product._id);
               self.errors.push('The product name already exists');
               self.product._id = "";
             } else {
