@@ -132,6 +132,8 @@ export default {
         }
         if (this.product.price==0) {
           this.errors.push('Price required.');
+        } else {
+          this.product.price = parseFloat(this.product.price).toFixed(2)
         }
 
         // ID check

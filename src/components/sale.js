@@ -23,12 +23,28 @@ export default {
       <h3>{{ header }}</h3>
       <div class="container">
         <div class="row">
-          <div class="col-9">
-            <div class="card-columns">
-              <div v-for="item in products" class="card" style="width: 16rem;" v-on:click="rowclicked(item.doc)">
-                <div class="card-body">
-                  <h5 class="card-title">{{ item.doc.group }} - {{ item.doc.shortName }}</h5>
-                  <p class="card-text">{{ item.doc.price }} - {{ item.doc.title }}</p>  
+          <div class="col-9 overflow-auto"  style="height:100%">
+            <div id="accordion">
+              <div v-for="productgroup, index in groupedProducts" class="card">
+                <div class="card-header" id="headingOne" data-toggle="collapse" :data-target="'#prod' + index" >
+                  <h5 class="mb-0">
+                    <button class="btn btn-link"  aria-expanded="true" aria-controls="collapseOne">
+                      {{ productgroup.group }}
+                    </button>
+                  </h5>
+                </div>
+
+                <div :id="'prod' + index" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                  <div class="card-body">
+                    <div class="card-columns">
+                      <div v-for="item in productgroup.items" class="card" style="width: 15rem;" v-on:click="rowclicked(item)">
+                        <div class="card-body">
+                          <h5 class="card-title">{{ item.shortName }}</h5>
+                          <p class="card-text">$ {{ item.price }} - {{ item.title }}</p>  
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -113,6 +129,7 @@ export default {
     methods:{
       caculateChange(){
         this.change = parseFloat(this.sale.tender) - this.sale.total;
+        this.change = this.change.toFixed(2);
       },
       cancel(){
         this.items = [],
@@ -127,12 +144,12 @@ export default {
         this.sale = null
       },
       removeItem(productId){
-        var newitem = true;
         for (var i = 0; i < this.items.length; i++){
           if (this.items[i].productId == productId){
             if (this.items[i].quantity > 0){     
                this.items[i].quantity -= 1;
                this.sale.total -= parseFloat(this.items[i].salePrice);
+               this.sale.total = this.sale.total.toFixed(2);
             }
             if (this.items[i].quantity == 0){
               this.items.splice(i, 1);
@@ -148,7 +165,9 @@ export default {
           this.sale = {};
           this.sale.total = 0;
         }
-        this.sale.total += parseFloat(product.price);
+        var total = parseFloat(this.sale.total);
+        total += parseFloat(product.price);
+        this.sale.total = parseFloat(total).toFixed(2);
         // see if item exists in list first
         var newitem = true;
         for (var i = 0; i < this.items.length; i++){
@@ -186,7 +205,31 @@ export default {
       }).catch(function(err){
         console.log(err);
       })
+      
       // Get all the products
+    },
+    computed: {
+      groupedProducts(){
+        var self = this;
+        var groupedProducts = []
+        var i = 0;
+        var j = -1;
+        var group = "";
+        console.log("Computed");
+        console.log(self.products.length)
+        for (i = 0; i < self.products.length; i++){
+          // New group 
+          console.log(self.products[i].doc._id);
+          if (self.products[i].doc.group != group){
+            j++
+            group = self.products[i].doc.group;
+            groupedProducts[j] = {group: group, items: []};
+            console.log(group);
+          }
+          groupedProducts[j].items.push(self.products[i].doc);
+        }
+        return groupedProducts;
+      }
     }
 };
 
