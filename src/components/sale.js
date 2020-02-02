@@ -65,7 +65,7 @@ export default {
             <div class="modal-body">
               <div class="form-group">
                 <label for="title">Charges $</label>
-                <input v-model="sale.total" type="text" class="form-control" id="title" placeholder="Charges" readonly>
+                <input v-model="sale.total" type="number" class="form-control" id="title" placeholder="Charges" readonly>
               </div>
               <div class="form-group">
                 <label for="title">Tender $</label>
@@ -95,7 +95,10 @@ export default {
               </button>
             </div>
             <div class="modal-body">
-              ...
+              <div class="form-group">
+                <label for="title">Charges $</label>
+                <input v-model="sale.total" type="number" class="form-control" id="title" placeholder="Charges" readonly>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
