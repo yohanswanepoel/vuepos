@@ -5,8 +5,14 @@ import POSSaleComponent from './components/sale.js'
 import store from './components/vuexstate.js'
 
 var db = new PouchDB('swanpos');
+//var remoteCouch = 'http://user:pass@myname.example.com/todos';
 
-
+function sync() {
+  syncDom.setAttribute('data-sync-state', 'syncing');
+  var opts = {live: true};
+  db.replicate.to(remoteCouch, opts, syncError);
+  db.replicate.from(remoteCouch, opts, syncError);
+}
 
 
   const NewSale = { template: '<div>New Sale</div>' }
