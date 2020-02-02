@@ -127,21 +127,30 @@ export default {
     </div>
     `,
     methods:{
+      generatedSaleId(date, tender){
+          // ID convention: type:yearmonthdayhourminutesecond:total:tender
+          var dateStr = date.getFullYear() + (date.getMonth() + 1) + date.getDate() + date.getHours() + date.getMinutes() + date.getSeconds();
+          return "sale" + ":" + dateStr + ":" + sale.total + ":" + tender; 
+      },
       caculateChange(){
         this.change = parseFloat(this.sale.tender) - this.sale.total;
         this.change = this.change.toFixed(2);
       },
       cancel(){
-        this.items = [],
-        this.sale = null
+        this.items = [];
+        this.sale = null;
       },
       cashPay(){
-        this.items = [],
-        this.sale = null
+        var date = new Date();
+        this.sale.id = this.generatedSaleId();
+        this.items = [];
+        this.sale = null;
       },
       cardPay(){
-        this.items = [],
-        this.sale = null
+        var date = new Date();
+        this.sale.id = this.generatedSaleId();
+        this.items = [];
+        this.sale = null;
       },
       removeItem(productId){
         for (var i = 0; i < this.items.length; i++){
@@ -156,6 +165,9 @@ export default {
             }
             break;
           }
+        }
+        if (this.items.length == 0){
+          this.sale = null;
         }
       },
       rowclicked(product){
