@@ -26,9 +26,9 @@ export default {
           <div class="col-9 overflow-auto"  style="height:100%">
             <div id="accordion">
               <div v-for="productgroup, index in groupedProducts" class="card">
-                <div class="card-header" id="headingOne" data-toggle="collapse" :data-target="'#prod' + index" >
+                <div class="card-header bg-secondary" id="headingOne" data-toggle="collapse" :data-target="'#prod' + index" >
                   <h5 class="mb-0">
-                    <button class="btn btn-link"  aria-expanded="true" aria-controls="collapseOne">
+                    <button class="btn text-white"  aria-expanded="true" aria-controls="collapseOne">
                       {{ productgroup.group }}
                     </button>
                   </h5>
