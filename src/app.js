@@ -48,5 +48,10 @@ var app = new Vue({
         // `this` points to the vm instance
         this.$store.db = db;
         this.$store.router = router;
+    },
+    beforeCreate: function(){
+      
     }
-})
+});
+
+
