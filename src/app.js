@@ -7,6 +7,8 @@ import store from './components/vuexstate.js'
 
 var db = new PouchDB('swanpos');
 //var remoteCouch = 'http://user:pass@myname.example.com/todos';
+// PouchDB.replicate('mydb', 'http://localhost:5984/mydb', {live: true});
+
 
 function sync() {
   syncDom.setAttribute('data-sync-state', 'syncing');
