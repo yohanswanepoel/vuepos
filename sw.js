@@ -19,7 +19,8 @@ var filesToCache = [
   '/src/components/listproducts.js',
   '/src/components/product.js',
   '/src/components/sale.js',
-  '/src/components/vuexstate.js'
+  '/src/components/vuexstate.js',
+  '/src/components/serverconfig.js'
 ];
 
 /* Start the service worker and cache all of the app's content */

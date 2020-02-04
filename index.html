@@ -17,13 +17,14 @@
     <script src="src/deps/bootstrap.min.js"></script>
     <script src="src/deps/axios.min.js"></script>
     <script src="src/deps/pouchdb-7.1.1.min.js"></script>
+    <link rel="stylesheet" href="src/styles/icons.css">
     <link rel="manifest" href="/manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #e3f2fd;">
-            <a class="navbar-brand" href="#">Canteen POS</a>
+            <router-link class="navbar-brand" to="/newSale">Canteen POS</router-link>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
@@ -36,10 +37,30 @@
                     <router-link class="nav-item nav-link" to="/listSales">List Sales</router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link class="nav-item nav-link" to="/newProduct">New Product</router-link>
-                </li>
-                <li class="nav-item">
                     <router-link class="nav-item nav-link" to="/listProducts">List Products</router-link>
+                </li>
+              </ul>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item vertical_middle" style="color: lightgrey">
+                  <i class="material-icons">
+                    airplanemode_active
+                  </i>
+                  <i class="material-icons">
+                    airplanemode_inactive
+                  </i>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle vertical_middle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="material-icons">settings</i>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <router-link class="dropdown-item" to="/admin">Admin Settings</router-link>
+                    <a class="dropdown-item" href="#">Reload App</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Lock</a>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -49,12 +70,7 @@
           </div>
     </div>
     <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker
-                .register('./sw.js', {
-                  scope : '/'
-                });
-      }
+      
     </script>
     <script src="src/app.js" type="module"></script>
     

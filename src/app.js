@@ -1,6 +1,7 @@
 import ProductComponent from './components/product.js';
-import ProductViewComponent from './components/listproducts.js'
-import POSSaleComponent from './components/sale.js'
+import ProductViewComponent from './components/listproducts.js';
+import POSSaleComponent from './components/sale.js';
+import ServerConfig from './components/serverconfig.js';
 
 import store from './components/vuexstate.js'
 
@@ -24,6 +25,7 @@ function sync() {
     { name: 'listSales', path: '/listSales', component: ListSales },
     { name: 'newProduct', path: '/newProduct', component: ProductComponent, props: { header : 'Create New Product' } },
     { name: 'listProducts', path: '/listProducts', component: ProductViewComponent },
+    { name: 'admin', path: '/admin', component: ServerConfig },
     { name: 'editProduct', path: '/editProduct/:id', component: ProductComponent, props: { header : 'Update Product' }}
   ]
 
@@ -50,7 +52,12 @@ var app = new Vue({
         this.$store.router = router;
     },
     beforeCreate: function(){
-      
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+                .register('./sw.js', {
+                  scope : '/'
+                });
+      }
     }
 });
 

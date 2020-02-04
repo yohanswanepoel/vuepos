@@ -1,4 +1,4 @@
-// ID convention: type:group:shortname:
+// ID convention: type:group:shortname
 export let ProductTemplate = {
     "_id": "",
     "type": "product",
@@ -10,6 +10,7 @@ export let ProductTemplate = {
     "costPrice": 0,
     "discount": 0,
     "salesTax": 0,
+    "activeFrom": "",
     "createdAt": "",
     "updatedAt": "",
     "createdBy": "test_user",
@@ -43,6 +44,18 @@ export let SaleTemplate = {
     "discount": null,
     "salesTaxTotal": null,
     "tender":"",
+    "createdAt": "",
+    "updatedAt": "",
+    "createdBy": "",
+    "updated_by": ""
+  };
+
+// ID terminal type:number:yearmonthdayhour
+export let ServerConfig = {
+    "_id": "",
+    "url": "sale",
+    "user": "",
+    "password": "",
     "createdAt": "",
     "updatedAt": "",
     "createdBy": "",
