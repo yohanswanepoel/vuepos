@@ -7,8 +7,23 @@ import store from './components/vuexstate.js'
 
 var db = new PouchDB('swanpos');
 //var remoteCouch = 'http://user:pass@myname.example.com/todos';
-// PouchDB.replicate('mydb', 'http://localhost:5984/mydb', {live: true});
-
+var remoteDB = 'http://localhost:5984/swanepos';
+db.sync(remoteDB, {
+  live: true,
+  retry: true
+}).on('change', function (change) {
+  // yo, something changed!
+  console.log('changes sync');
+}).on('paused', function (info) {
+  // replication was paused, usually because of a lost connection
+  console.log('paused');
+}).on('active', function (info) {
+  // replication was resumed
+  console.log('resume replication');
+}).on('error', function (err) {
+  // totally unhandled error (shouldn't happen)
+  console.log(err);
+});
 
 function sync() {
   syncDom.setAttribute('data-sync-state', 'syncing');
