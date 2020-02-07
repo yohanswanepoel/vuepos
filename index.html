@@ -24,49 +24,71 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #e3f2fd;">
-            <router-link class="navbar-brand" to="/newSale">Canteen POS</router-link>
+            <router-link class="navbar-brand" to="#">Canteen POS</router-link>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-              <ul class="navbar-nav">
+              <ul v-if="user_role" class="navbar-nav">
                 <li class="nav-item">
                     <router-link class="nav-item nav-link" to="/newSale">New Sale</router-link>
                 </li>
-                <li class="nav-item">
+                <li v-if="user_role=='admin'" class="nav-item">
                     <router-link class="nav-item nav-link" to="/listSales">List Sales</router-link>
                 </li>
-                <li class="nav-item">
+                <li v-if="user_role=='admin'" class="nav-item">
                     <router-link class="nav-item nav-link" to="/listProducts">List Products</router-link>
                 </li>
               </ul>
             </div>
             <div class="collapse navbar-collapse" id="navbarNav">
+              <span style="color: lightgrey;">Last Sync: {{ last_sync }}</span>
               <ul class="navbar-nav">
-                <li class="nav-item vertical_middle" style="color: lightgrey">
-                  <i class="material-icons">
-                    airplanemode_active
-                  </i>
-                  <i class="material-icons">
-                    airplanemode_inactive
-                  </i>
-                </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle vertical_middle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="material-icons">settings</i>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <router-link class="dropdown-item" to="/admin">Admin Settings</router-link>
                     <a class="dropdown-item" href="#">Reload App</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Lock</a>
+                    <a class="dropdown-item" v-on:click="logOut()">Log Out</a>
                   </div>
                 </li>
-              </ul>
+              </ul> 
             </div>
           </nav>
           <div class="container"> 
-            <router-view></router-view>
+            <div v-if="loggedIn">
+              <router-view></router-view>
+            </div>
+            <div v-else> 
+              <p v-if="errors.length" class="alert alert-danger" role="alert">
+                <b>Please correct the following error(s):</b>
+                <ul>
+                  <li v-for="error in errors">{{ error }}</li>
+                </ul>
+              </p>
+              <p v-if="messages.length" class="alert alert-success" role="alert">
+                <ul>
+                  <li v-for="message in messages">{{ message }}</li>
+                </ul>
+              </p>
+              <form id="loginForm">
+                <div class="form-group">
+                  <label for="userName">User Name</label>
+                  <input v-model="user" type="text" class="form-control" id="userName" placeholder="User">
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                  <label for="server">Password</label>
+                  <input v-model="server" type="text" class="form-control" id="server" placeholder="Server">
+                </div>
+                <button type="button" class="btn btn-primary" v-on:click="login()">Login</button>
+              </form>
+            </div>
           </div>
     </div>
     <script>

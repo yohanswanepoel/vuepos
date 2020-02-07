@@ -1,7 +1,8 @@
 export default new Vuex.Store({
     state: {
       db: null ,
-      user: "test_user"
+      user: "test_user",
+      user_role: null
     },
     
     getters: {
