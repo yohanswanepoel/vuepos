@@ -7,6 +7,7 @@ var filesToCache = [
   '/src/deps/axios.min.js',
   '/src/deps/jquery-3.4.1.slim.min.js',
   '/src/deps/pouchdb-7.1.1.min.js',
+  '/src/deps/pouchdb.authentication.min.js',
   '/src/deps/vue.js',
   '/src/deps/vuex.js',
   '/src/deps/vue-router.js',

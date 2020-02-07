@@ -6,7 +6,6 @@ import store from './components/vuexstate.js'
 
 var db = new PouchDB('swanpos');
 //var remoteCouch = 'http://user:pass@myname.example.com/todos';
-var remoteDB = 'http://localhost:5984/swanepos';
 
   const NewSale = { template: '<div>New Sale</div>' }
   const ListSales = { template: '<div>List Sales</div>' }
@@ -45,11 +44,14 @@ var app = new Vue({
         messages: [],
         loggedIn: false,
         user_role: null,
-        sync_handler: null
+        sync_handler: null,
+        remote_db : null,
+        remoteDbstr: ""
     },
     methods: {
       login:function(){
         // validate input
+        var self = this;
         console.log("Login");
         if (this.user == ""){
           this.errors.push("Specify user");
@@ -59,14 +61,23 @@ var app = new Vue({
           this.errors.push("Specify server");
         }
         if (this.errors.length == 0){
-          if (this.user == "j"){
-            this.user_role = "admin";
-          }else{
-            this.user_role = "pos";
-            this.$router.push({ name: 'newSale'})
-          }
-          this.loggedIn = true;
-          this.database_sync();
+          this.remoteDbstr = "http://"+this.server+":5984/swanepos";
+          this.remoteDb = new PouchDB(this.remoteDbstr, {skip_setup: true});
+          //
+          this.remoteDb.login(this.user, this.password).then(function (res) {
+            console.log("Login successful");
+            console.log(res.roles);
+            var x = 0
+            for (x = 0; x < res.roles.length; x++){
+              if(res.roles[x]=="admin"){
+                self.user_role = "admin";
+              }else if(res.roles[x]=="pos" && self.user_role != "admin"){
+                self.user_role = "pos";
+              }
+            }
+            self.loggedIn = true;
+            self.database_sync();
+          });
         }
 
       },
@@ -85,9 +96,8 @@ var app = new Vue({
         
       },
       database_sync:function (){
-        var remoteDb = "http://"+this.server+":5984/swanepos";
         var self = this;
-        this.sync_handler = db.sync(remoteDb, {
+        this.sync_handler = db.sync(this.remoteDbstr, {
           live: true,
           retry: true
         }).on('change', function (change) {

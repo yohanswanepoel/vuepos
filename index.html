@@ -17,6 +17,7 @@
     <script src="src/deps/bootstrap.min.js"></script>
     <script src="src/deps/axios.min.js"></script>
     <script src="src/deps/pouchdb-7.1.1.min.js"></script>
+    <script src="/src/deps/pouchdb.authentication.min.js"></script>
     <link rel="stylesheet" href="src/styles/icons.css">
     <link rel="manifest" href="/manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,6 +51,8 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="#">Reload App</a>
+                    <a class="dropdown-item" href="#">Manage Users</a>
+                    <a class="dropdown-item" href="#">Reset Password</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" v-on:click="logOut()">Log Out</a>
                   </div>
