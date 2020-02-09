@@ -3,6 +3,8 @@ import ProductViewComponent from './components/listproducts.js';
 import POSSaleComponent from './components/sale.js';
 
 import store from './components/vuexstate.js'
+import {formatDateForId} from './helpers.js';
+
 
 var db = new PouchDB('swanpos');
 //var remoteCouch = 'http://user:pass@myname.example.com/todos';
@@ -49,6 +51,7 @@ var app = new Vue({
         remoteDbstr: ""
     },
     methods: {
+      formatDateForId: formatDateForId,
       login:function(){
         // validate input
         var self = this;
@@ -132,6 +135,7 @@ var app = new Vue({
         this.$store.router = router;
         this.$store.user_role = null;
         this.$store.connected = true;
+        this.$store.today = this.formatDateForId(new Date());
     },
     beforeCreate: function(){
       if ('serviceWorker' in navigator) {

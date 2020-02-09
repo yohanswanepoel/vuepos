@@ -15,7 +15,8 @@ export default {
           messages: [],
           items: [],
           header: "Sale",
-          change: 0
+          change: 0,
+          today: ""
        }
 	  },
   template: `
@@ -140,7 +141,7 @@ export default {
     methods:{
       generatedSaleId(date){
           // ID convention: type:yearmonthdayhourminutesecond:total:tender
-          var dateStr = date.getFullYear() + "" + (date.getMonth() + 1) + "" + date.getDate() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
+          var dateStr = this.$store.today + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
           return "sale" + ":" + dateStr + ":" + this.sale.total; 
       },
       createSaleItem(tenderType){
@@ -248,10 +249,13 @@ export default {
       // and EndKey is the value plus a high value Unicode char
       var self = this;
       var db = this.$store.db;
+      var today = this.$store.today;
+
+      console.log(today)
       db.allDocs({
         include_docs: true,
         startkey: "product",
-        endkey: "product\ufff0"
+        endkey: "product:"+today+"\ufff0"
       }).then(function(result){
         self.products = result.rows;
         //console.log(self.products);
