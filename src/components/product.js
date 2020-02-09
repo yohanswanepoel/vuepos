@@ -178,7 +178,7 @@ export default {
         if (this.errors.length == 0 && this.product._id == ""){
           
           var id_date = this.product.activeFrom.replace(/-/g,"");
-          this.product._id = "product:" + id_date + ":" + this.product.group + ":" + this.product.shortName;
+          this.product._id = "product:" + this.product.group + ":" + this.product.shortName + ":" + id_date;
         }
 
         if (this.product.createdAt == ""){

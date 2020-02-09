@@ -254,8 +254,9 @@ export default {
       console.log(today)
       db.allDocs({
         include_docs: true,
-        startkey: "product",
-        endkey: "product:"+today+"\ufff0"
+        descending: true,
+        endkey: "product",
+        startkey: "product:\ufff0"
       }).then(function(result){
         self.products = result.rows;
         //console.log(self.products);
@@ -273,18 +274,28 @@ export default {
         var i = 0;
         var j = -1;
         var group = "";
+        var prev_prod = "";
         //console.log("Computed");
         //console.log(self.products.length)
+        var today = new Date();
+        var active_from = new Date();
         for (i = 0; i < self.products.length; i++){
           // New group 
           //console.log(self.products[i].doc._id);
-          if (self.products[i].doc.group != group){
-            j++
-            group = self.products[i].doc.group;
-            groupedProducts[j] = {group: group, items: []};
-            //console.log(group);
+          active_from = new Date(self.products[i].doc.activeFrom);
+          if (active_from <= today){
+            if (self.products[i].doc.group != group){
+              j++
+              group = self.products[i].doc.group;
+              groupedProducts[j] = {group: group, items: []};
+              //console.log(group);
+              prev_prod = "";
+            }
+            if (self.products[i].doc.shortName != prev_prod){
+              prev_prod = self.products[i].doc.shortName;
+              groupedProducts[j].items.push(self.products[i].doc);
+            }
           }
-          groupedProducts[j].items.push(self.products[i].doc);
         }
         return groupedProducts;
       }
