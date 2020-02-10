@@ -1,6 +1,7 @@
 import ProductComponent from './components/product.js';
 import ProductViewComponent from './components/listproducts.js';
 import POSSaleComponent from './components/sale.js';
+import SaleViewComponent from './components/listsales.js';
 
 import store from './components/vuexstate.js'
 import {formatDateForId} from './helpers.js';
@@ -9,15 +10,12 @@ import {formatDateForId} from './helpers.js';
 var db = new PouchDB('swanpos');
 //var remoteCouch = 'http://user:pass@myname.example.com/todos';
 
-  const NewSale = { template: '<div>New Sale</div>' }
-  const ListSales = { template: '<div>List Sales</div>' }
-
   const LoginTemplate = { template: '<div>Logged In</div>' }
 
   const routes = [
     { name: 'login', path: '/', component: LoginTemplate},
     { name: 'newSale', path: '/newSale', component: POSSaleComponent },
-    { name: 'listSales', path: '/listSales', component: ListSales },
+    { name: 'listSales', path: '/listSales', component: SaleViewComponent },
     { name: 'newProduct', path: '/newProduct', component: ProductComponent, props: { header : 'Create New Product' } },
     { name: 'listProducts', path: '/listProducts', component: ProductViewComponent },
     { name: 'editProduct', path: '/editProduct/:id', component: ProductComponent, props: { header : 'Update Product' }}
@@ -125,6 +123,7 @@ var app = new Vue({
         }).on('error', function (err) {
           // totally unhandled error (shouldn't happen)
           self.connected = false;
+          self.last_sync = "Disconnected";
           console.log(err);
         });
       }
@@ -136,6 +135,12 @@ var app = new Vue({
         this.$store.user_role = null;
         this.$store.connected = true;
         this.$store.today = this.formatDateForId(new Date());
+        var debug = true;
+        if (debug){
+          this.user = "posadmin";
+          this.user_role = "admin";
+          this.loggedIn = true;
+        }
     },
     beforeCreate: function(){
       if ('serviceWorker' in navigator) {

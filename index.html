@@ -42,7 +42,7 @@
                 </li>
               </ul>
             </div>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div v-if="user_role" class="collapse navbar-collapse" id="navbarNav">
               <span style="color: lightgrey;">Last Sync: {{ last_sync }}</span>
               <ul class="navbar-nav">
                 <li class="nav-item dropdown">

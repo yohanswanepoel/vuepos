@@ -126,6 +126,7 @@ export default {
       copyProduct(){
         var oldProduct = this.product;
         this.product = ProductTemplate;
+        this.product._id = "";
         this.product.shortName = oldProduct.shortName;
         this.product.title = oldProduct.title;
         this.product.price = oldProduct.price;

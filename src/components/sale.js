@@ -40,8 +40,8 @@ export default {
                     <div class="card-columns">
                       <div v-for="item in productgroup.items" class="card" style="width: 15rem;" v-on:click="rowclicked(item)">
                         <div class="card-body">
-                          <h5 class="card-title">{{ item.shortName }}</h5>
-                          <p class="card-text">$ {{ item.price }} - {{ item.title }}</p>  
+                          <h5 class="card-title">{{ item.title }}</h5>
+                          <p class="card-text">$ {{ item.price }}</p>  
                         </div>
                       </div>
                     </div>
@@ -141,7 +141,20 @@ export default {
     methods:{
       generatedSaleId(date){
           // ID convention: type:yearmonthdayhourminutesecond:total:tender
-          var dateStr = this.$store.today + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
+          var hours = "" + date.getHours();
+          var minutes =  "" + date.getMinutes();
+          var seconds = "" + date.getSeconds();
+          if (hours.length < 2) {
+            hours = "0" + hours;
+          }
+          if (minutes.length < 2) {
+            minutes = "0" + minutes;
+          }
+          if (seconds.length < 2) {
+            seconds = "0" + seconds;
+          }
+          var time = hours + minutes + seconds
+          var dateStr = this.$store.today + "" + time;
           return "sale" + ":" + dateStr + ":" + this.sale.total; 
       },
       createSaleItem(tenderType){
@@ -149,7 +162,8 @@ export default {
         var date = new Date();
         this.sale._id = this.generatedSaleId(date);
         this.sale.tender = tenderType
-        var date = new Date()
+        this.sale.createdBy = this.$store.user;
+        this.sale.createdAt = date;
         let i = 0;
         for (i = 0; i < this.items.length; i++){
           this.items[i]._id = "item:"+this.sale._id + ":" + this.items[i].productId;

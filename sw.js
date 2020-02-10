@@ -19,6 +19,7 @@ var filesToCache = [
   '/src/styles/offline.css',
   '/src/components/datatypes.js',
   '/src/components/listproducts.js',
+  '/src/components/listsales.js',
   '/src/components/product.js',
   '/src/components/sale.js',
   '/src/components/vuexstate.js',
