@@ -8,7 +8,10 @@ export default {
           errors: [],
           messages: [],
           header: "List Sales",
-          deleteDoc: null
+          deleteDoc: null,
+          dateFrom: "",
+          dateTo: "",
+          filterType: "Year"
        }
 	  },
   template: `
@@ -20,7 +23,7 @@ export default {
                 <h2>{{ header }}</h2>
             </div>
             <div class="col-sm-6">
-              <a class="btn btn-success btn" href="#"><i class="material-icons">&#xE147;</i>Filter</a>
+              <a class="btn btn-success btn" v-on:click="applyFilter()"><i class="material-icons">&#xE147;</i>Filter</a>
             </div>
           </div>
         </div>
@@ -38,7 +41,23 @@ export default {
         <table class="table table-striped table-hover  table-sm">
           <thead>
             <tr>
-              <th scope="col" colspan="1">Date</th>
+              <th scope="col" colspan="1">Date : 
+                <label for="exampleSelect1">Filter Type</label>
+                <select v-model="filterType" id="exampleSelect1">
+                  <option>Clear</option>
+                  <option>Year</option>
+                  <option>Month</option>
+                  <option>Day</option>
+                </select>
+              <div v-if="filterType=='Day'">
+              From:<input v-model="dateFrom" type="date"  id="activeFrom" placeholder="0.0">
+              To:<input v-model="dateTo" type="date"  id="activeFrom" placeholder="0.0">
+              </div>
+              <div v-if="filterType=='Month' || filterType=='Year'">
+              From:<input v-model="dateFrom" type="month"  id="activeFrom" placeholder="0.0">
+              To:<input v-model="dateTo" type="month"  id="activeFrom" placeholder="0.0">
+              </div>
+              </th>
               <th scope="col" colspan="3">Value</th>
               <th scope="col" colspan="1">Tender</th>
               <th scope="col" colspan="2">Action</th>
@@ -90,6 +109,26 @@ export default {
         //this.$router.push({ name: 'editProduct', params: { id: product._id, heading: 'Edit Product' } })
 
       },
+      applyFilter(){
+        this.errors = [];
+        if (this.filterType == "Clear"){
+          this.loadSales("","");
+        }else {
+          if (this.dateFrom == "" || this.dateTo == ""){
+            this.errors.push("Please specify dates");
+          } else if (this.filterType == "Year"){
+            this.loadSales(this.dateFrom.slice(0,4), this.dateTo.slice(0,4));
+          }else if(this.filterType == "Month"){
+            var from = this.dateFrom.slice(0,4) + "" + this.dateFrom.slice(5,7);
+            var to = this.dateTo.slice(0,4) + "" + this.dateTo.slice(5,7);
+            this.loadSales(from, to);
+          }else if(this.filterType == "Day"){
+            var from = this.dateFrom.slice(0,4) + "" + this.dateFrom.slice(5,7) + "" + this.dateFrom.slice(8,10);
+            var to = this.dateTo.slice(0,4) + "" + this.dateTo.slice(5,7) + "" + this.dateTo.slice(8,10);
+            this.loadSales(from, to)
+          }
+        }
+      },
       deleteSelected(tiem){
         //this.deleteDoc = item;
       },
@@ -109,13 +148,13 @@ export default {
           })
         })
       },
-      loadSales(){
+      loadSales(fDate, tDate){
         var self = this;
         var db = this.$store.db;
         db.allDocs({
           include_docs: true,
-          startkey: "sale:",
-          endkey: "sale:\ufff0"
+          startkey: "sale:"+fDate,
+          endkey: "sale:"+tDate+"\ufff0"
         }).then(function(result){
           self.products = result.rows;
           //console.log(self.products);
@@ -129,7 +168,7 @@ export default {
       // This ensures promises do not get messed up
       // All docs is our friend here, using a built-in view, StartKey is the value 
       // and EndKey is the value plus a high value Unicode char
-      this.loadSales()
+      this.loadSales("","")
       // Get all the products
     },
     filters: {

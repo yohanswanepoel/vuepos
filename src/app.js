@@ -135,7 +135,7 @@ var app = new Vue({
         this.$store.user_role = null;
         this.$store.connected = true;
         this.$store.today = this.formatDateForId(new Date());
-        var debug = true;
+        var debug = false;
         if (debug){
           this.user = "posadmin";
           this.user_role = "admin";
