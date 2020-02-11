@@ -14,6 +14,7 @@ export default {
           errors: [],
           messages: [],
           items: [],
+          groups: [],
           header: "Sale",
           change: -1,
           today: ""
@@ -187,10 +188,6 @@ export default {
             self.errors.push("Save Failed");
           }
         )
-        //item:sale._id:productId
-
-
-        
       },
       caculateChange(){
         this.change = parseFloat(this.sale.tender) - this.sale.total;
@@ -265,9 +262,15 @@ export default {
       // and EndKey is the value plus a high value Unicode char
       var self = this;
       var db = this.$store.state.db;
-      var today = this.$store.today;
+      db.allDocs({
+        include_docs: true,
+        descending: true,
+        endkey: "group",
+        startkey: "groupufff0"
+      }).then(function(result){
+        self.groups = result.rows;
+      })
 
-      console.log(today)
       db.allDocs({
         include_docs: true,
         descending: true,
@@ -301,7 +304,7 @@ export default {
           active_from = new Date(self.products[i].doc.activeFrom);
           if (active_from <= today){
             if (self.products[i].doc.group != group){
-              j++
+              j++;
               group = self.products[i].doc.group;
               groupedProducts[j] = {group: group, items: []};
               //console.log(group);
@@ -310,6 +313,14 @@ export default {
             if (self.products[i].doc.shortName != prev_prod){
               prev_prod = self.products[i].doc.shortName;
               groupedProducts[j].items.push(self.products[i].doc);
+            }
+          }
+        }
+        for (i = 0; i < groupedProducts.length; i++){
+          j = 0;
+          for (j =0; j < self.groups.length; j++){
+            if (groupedProducts[i].group == self.groups[j].doc._id){
+              groupedProducts[i].group = self.groups[j].doc.name;
             }
           }
         }

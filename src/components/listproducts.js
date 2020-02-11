@@ -114,6 +114,7 @@ export default {
       loadProducts(){
         var self = this;
         var db = this.$store.state.db;
+        console.log(db);
         db.allDocs({
           include_docs: true,
           startkey: "product",

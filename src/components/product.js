@@ -8,8 +8,9 @@ export default {
           product: ProductTemplate,
           errors: [],
           messages: [],
-          newProduct : false,
-          updateProduct : true,
+          groups: [],
+          newProduct: false,
+          updateProduct: true,
        }
 	  },
   template: `
@@ -54,12 +55,7 @@ export default {
               <div class="form-group">
                 <label for="group">Group</label>
                 <select v-model="product.group" class="form-control" id="group">
-                  <option>Hot Food</option>
-                  <option>Cold Food</option>
-                  <option>Drinks</option>
-                  <option>Treats</option>
-                  <option>Value Packs</option>
-                  <option>Snacks</option>
+                  <option v-for="item in groups" v-bind:value="item.doc._id" >{{ item.doc.name }}</option>
                 </select>
               </div>
               <div class="form-group">
@@ -94,11 +90,23 @@ export default {
     `,
     mounted: function () {
         // `this` points to the vm instance
-        var db = this.$store.db;
+        var db = this.$store.state.db;
         var self = this;
         var pid = this.$route.params.id;
         this.errors = [];
         this.messages = [];
+        // Load group
+        db.allDocs({
+          include_docs: true,
+          startkey: "group:",
+          endkey: "group:\ufff0"
+        }).then(function(result){
+          self.groups = result.rows;
+          //console.log(self.products);
+          //console.log(self.products[0].doc._id);
+        }).catch(function(err){
+          console.log(err);
+        })
         if (pid != null){
            // This is an update
             db.get(pid).then(function (doc) {
@@ -140,17 +148,6 @@ export default {
       },
       cancel(){
         window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/');
-      },
-      displayDBInfo() {
-        var db = this.$store.state.db;
-        db.info().then(function (info) {
-          console.log(info);
-        })
-        db.get('product:hamburger2').then(function (doc) {
-          console.log(doc);
-        }).catch(function (err) {
-          console.log(err);
-        });
       },
       saveProduct(){
         var self = this;

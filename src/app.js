@@ -4,7 +4,7 @@ import POSSaleComponent from './components/sale.js';
 import SaleViewComponent from './components/listsales.js';
 
 import store from './components/vuexstate.js'
-import {formatDateForId} from './helpers.js';
+import {formatDateForId, addReferenceData, createDatabaseViews} from './helpers.js';
 
 
 var db = new PouchDB('swanpos');
@@ -51,8 +51,11 @@ var app = new Vue({
         remoteDbstr: ""
     },
     methods: {
+      addReferenceData: function(){
+        addReferenceData(remoteDb);
+      },
       formatDateForId: formatDateForId,
-      login:function(){
+      login: function(){
         // validate input
         var self = this;
         console.log("Login");
@@ -91,7 +94,7 @@ var app = new Vue({
         }
 
       },
-      logOut:function(){
+      logOut: function(){
         this.user = null;
         this.user_role = null;
         this.loggedIn = false;
@@ -106,25 +109,7 @@ var app = new Vue({
         
       },
       create_db_views: function(){
-        var view = {
-          _id: '_design/byTypeDesign',
-          filters: {
-            byTypeFilter: function (doc, req) {
-              return doc.type === req.query.type;
-            }.toString()
-          }
-        }
-        
-        db.get('_design/byTypeDesign').then(function(doc){
-          //  
-        }).catch(function(err){
-          db.put(view);
-        });
-        remoteDb.get('_design/byTypeDesign').then(function(doc){
-          //
-        }).catch(function(err){
-          remoteDb.put(view);
-        });
+        createDatabaseViews(db, remoteDb);
       },
       database_push: function(){
         // This is to push the the sales
@@ -170,6 +155,10 @@ var app = new Vue({
               db.remove(doc);
             });
           }
+          var date = new Date();
+          var dateStr = date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+          self.last_sync = dateStr;
+          self.connected = true;
         }).on('error', function (err) {
           // totally unhandled error (shouldn't happen)
          
@@ -186,30 +175,18 @@ var app = new Vue({
       database_sync: function(){
         // This is for product updates
         var self = this;
+        db.sync(this.remoteDbstr, {
+          live: true,
+          retry: true,
+          filter: 'byTypeDesign/byTypeFilter',
+          query_params: {type: 'group'}
+        });
+
         this.sync_down = db.sync(this.remoteDbstr, {
           live: true,
           retry: true,
           filter: 'byTypeDesign/byTypeFilter',
           query_params: {type: 'product'}
-        }).on('change', function (change) {
-          // yo, something changed!
-          var date = new Date();
-          var dateStr = date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-          self.last_sync = dateStr;
-          self.connected = true;
-          console.log('changes sync');
-        }).on('paused', function (info) {
-          //self.connected = true;
-          // replication was paused, usually because of a lost connection
-          console.log('paused');
-          self.connected = true;
-        }).on('active', function (info) {
-          // replication was resumed
-          var date = new Date();
-          var dateStr = date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-          self.connected = true;
-          self.last_sync = dateStr;
-          console.log('resume replication');
         }).on('error', function (err) {
           // totally unhandled error (shouldn't happen)
           self.connected = false;
