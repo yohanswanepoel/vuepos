@@ -15,7 +15,7 @@ export default {
           messages: [],
           items: [],
           header: "Sale",
-          change: 0,
+          change: -1,
           today: ""
        }
 	  },
@@ -106,7 +106,7 @@ export default {
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-success" data-dismiss="modal" v-on:click="cashPay()">Complete</button>
+              <button v-if="change >= 0" type="button" class="btn btn-success" data-dismiss="modal" v-on:click="cashPay()">Complete</button>
             </div>
           </div>
         </div>
