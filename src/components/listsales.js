@@ -134,7 +134,7 @@ export default {
       },
       deleteItem(){
         var self = this;
-        var db = this.$store.db;
+        var db = this.$store.state.remoteDB;
         
         db.get(self.deleteDoc._id).then(function(doc){
           db.remove(doc).then(function(res){
@@ -150,7 +150,7 @@ export default {
       },
       loadSales(fDate, tDate){
         var self = this;
-        var db = this.$store.db;
+        var db = this.$store.state.remoteDB;
         db.allDocs({
           include_docs: true,
           startkey: "sale:"+fDate,

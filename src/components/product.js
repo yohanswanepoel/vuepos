@@ -142,7 +142,7 @@ export default {
         window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/');
       },
       displayDBInfo() {
-        var db = this.$store.db;
+        var db = this.$store.state.db;
         db.info().then(function (info) {
           console.log(info);
         })
@@ -156,7 +156,7 @@ export default {
         var self = this;
         this.errors = [];
         this.messages = [];
-        var db = this.$store.db;
+        var db = this.$store.state.db;
         var date = new Date();
 
         // validations

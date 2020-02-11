@@ -8,6 +8,7 @@ import {formatDateForId} from './helpers.js';
 
 
 var db = new PouchDB('swanpos');
+var remoteDb = null;
 //var remoteCouch = 'http://user:pass@myname.example.com/todos';
 
   const LoginTemplate = { template: '<div>Logged In</div>' }
@@ -44,7 +45,8 @@ var app = new Vue({
         messages: [],
         loggedIn: false,
         user_role: null,
-        sync_handler: null,
+        sync_down: null,
+        sync_up: null,
         remote_db : null,
         remoteDbstr: ""
     },
@@ -63,9 +65,11 @@ var app = new Vue({
         }
         if (this.errors.length == 0){
           this.remoteDbstr = "http://"+this.server+":5984/swanepos";
-          this.remoteDb = new PouchDB(this.remoteDbstr, {skip_setup: true});
+          remoteDb = new PouchDB(this.remoteDbstr, {skip_setup: true});
+          this.$store.state.remoteDB = remoteDb;
+          this.$store.commit('updateRemoteDB',remoteDb);
           //
-          this.remoteDb.login(this.user, this.password).then(function (res) {
+          remoteDb.login(this.user, this.password).then(function (res) {
             console.log("Login successful");
             console.log(res.roles);
             var x = 0
@@ -77,8 +81,13 @@ var app = new Vue({
               }
             }
             self.loggedIn = true;
+            //@Todo Put this function somewhere else
+            self.create_db_views();
+            self.database_compact();
+            self.database_push();
             self.database_sync();
           });
+
         }
 
       },
@@ -87,7 +96,7 @@ var app = new Vue({
         this.user_role = null;
         this.loggedIn = false;
         // @TODO Stop sync
-        this.sync_handler.cancel();
+        this.sync_down.cancel();
         this.$router.push({ name: 'login'}).then(function(res){
           // Ignore
           console.log("Logged Out");
@@ -96,11 +105,92 @@ var app = new Vue({
         });
         
       },
-      database_sync:function (){
+      create_db_views: function(){
+        var view = {
+          _id: '_design/byTypeDesign',
+          filters: {
+            byTypeFilter: function (doc, req) {
+              return doc.type === req.query.type;
+            }.toString()
+          }
+        }
+        
+        db.get('_design/byTypeDesign').then(function(doc){
+          //  
+        }).catch(function(err){
+          db.put(view);
+        });
+        remoteDb.get('_design/byTypeDesign').then(function(doc){
+          //
+        }).catch(function(err){
+          remoteDb.put(view);
+        });
+      },
+      database_push: function(){
+        // This is to push the the sales
         var self = this;
-        this.sync_handler = db.sync(this.remoteDbstr, {
+        var sale_rep = db.replicate.to(this.remoteDbstr, {
           live: true,
-          retry: true
+          retry: true,
+          filter: 'byTypeDesign/byTypeFilter',
+          query_params: {type: 'sale'}
+        }).on('paused', function (info) {
+          //self.connected = true;
+          // replication was paused, usually because of a lost connection
+          console.log('paused sale');
+        }).on('change', function(change){
+          console.log(change);
+          var i = 0;
+          for (i = 0; i < change.docs.length; i++){
+            db.get(change.docs[i]._id).then(function(doc){
+              db.remove(doc);
+            });
+          }
+        }).on('error', function (err) {
+          // totally unhandled error (shouldn't happen)
+         
+          
+          console.log(err);
+        });
+
+        var item_rep = db.replicate.to(this.remoteDbstr, {
+          live: true,
+          retry: true,
+          filter: 'byTypeDesign/byTypeFilter',
+          query_params: {type: 'saleitem'}
+        }).on('paused', function (info) {
+          //self.connected = true;
+          // replication was paused, usually because of a lost connection
+          console.log('paused items');
+        }).on('change', function(change){
+          console.log(change);
+          var i = 0;
+          for (i = 0; i < change.docs.length; i++){
+            db.get(change.docs[i]._id).then(function(doc){
+              db.remove(doc);
+            });
+          }
+        }).on('error', function (err) {
+          // totally unhandled error (shouldn't happen)
+         
+          console.log(err);
+        });
+      },
+      database_compact: function(){
+        db.compact().then(function (result) {
+          // handle result
+        }).catch(function (err) {
+          console.log(err);
+        });
+      },
+      database_sync: function(){
+        // This is for product updates
+        var self = this;
+        this.sync_down = db.sync(this.remoteDbstr, {
+          live: true,
+          retry: true,
+          filter: 'byTypeDesign/byTypeFilter',
+          query_params: {type: 'product'}
         }).on('change', function (change) {
           // yo, something changed!
           var date = new Date();
@@ -130,11 +220,10 @@ var app = new Vue({
     },
     created: function () {
         // `this` points to the vm instance
-        this.$store.db = db;
-        this.$store.router = router;
-        this.$store.user_role = null;
-        this.$store.connected = true;
-        this.$store.today = this.formatDateForId(new Date());
+        this.$store.state.db = db;
+        this.$store.state.user_role = null;
+        this.$store.state.connected = true;
+        this.$store.state.today = this.formatDateForId(new Date());
         var debug = false;
         if (debug){
           this.user = "posadmin";

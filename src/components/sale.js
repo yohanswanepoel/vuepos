@@ -154,16 +154,17 @@ export default {
             seconds = "0" + seconds;
           }
           var time = hours + minutes + seconds
-          var dateStr = this.$store.today + "" + time;
+          var dateStr = this.$store.state.today + "" + time;
           return "sale" + ":" + dateStr + ":" + this.sale.total; 
       },
       createSaleItem(tenderType){
-        var db = this.$store.db;
+        var db = this.$store.state.db;
         var date = new Date();
         this.sale._id = this.generatedSaleId(date);
         this.sale.tender = tenderType
         this.sale.createdBy = this.$store.user;
         this.sale.createdAt = date;
+        this.sale.type = 'sale';
         let i = 0;
         for (i = 0; i < this.items.length; i++){
           this.items[i]._id = "item:"+this.sale._id + ":" + this.items[i].productId;
@@ -250,6 +251,7 @@ export default {
           item.quantity = 1;
           item.salePrice = parseFloat(product.price).toFixed(2);
           item.name = product.shortName;
+          item.type = 'saleitem';
           var date = new Date()
           item.createdAt = date.toJSON();
           item.createdBy = this.$store.user;
@@ -262,7 +264,7 @@ export default {
       // All docs is our friend here, using a built-in view, StartKey is the value 
       // and EndKey is the value plus a high value Unicode char
       var self = this;
-      var db = this.$store.db;
+      var db = this.$store.state.db;
       var today = this.$store.today;
 
       console.log(today)

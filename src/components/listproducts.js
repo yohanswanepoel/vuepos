@@ -97,7 +97,7 @@ export default {
       },
       deleteItem(){
         var self = this;
-        var db = this.$store.db;
+        var db = this.$store.state.db;
         
         db.get(self.deleteDoc._id).then(function(doc){
           db.remove(doc).then(function(res){
@@ -113,7 +113,7 @@ export default {
       },
       loadProducts(){
         var self = this;
-        var db = this.$store.db;
+        var db = this.$store.state.db;
         db.allDocs({
           include_docs: true,
           startkey: "product",
