@@ -56,6 +56,7 @@ var app = new Vue({
       },
       createViews: function(){
         createSaleViews(remoteDb);
+        createSaleItemViews(remoteDb);
       },
       formatDateForId: formatDateForId,
       login: function(){

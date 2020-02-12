@@ -49,14 +49,32 @@ function createSaleViews(db){
           }
         },
         "language": "javascript"
-      }
+      };
     db.get('_design/salesBy').then(function(doc){
         // The view exists do nothing
     }).catch(function(res){
         db.put(salesByView);
-    })
-    
+    });
 }
+
+function createSaleItemViews(db){
+    var salesByIdView = {
+        "_id": "_design/saleItemsBy",
+        "views": {
+          "sum": {
+            "reduce": "function (keys, values, rereduce) {\n  // reduce function\n  var result = {name:\"\", qty:0}\n\n  for(var i = 0; i < values.length; i++) {\n    result.name = values[i].name\n    result.qty += values[i].qty\n  }\n\n  return result\n}",
+            "map": "function (doc) {\n  if(doc.type == 'saleitem'){\n    emit([doc.productId, doc.createdAt.slice(0,4), doc.createdAt.slice(5,7), doc.createdAt.slice(8,10)], {name: doc.name, qty: Number(doc.quantity)});\n  }\n}"
+          }
+        },
+        "language": "javascript"
+      };
+    db.get('_design/salesBy').then(function(doc){
+        // The view exists do nothing
+    }).catch(function(res){
+        db.put(salesByView);
+    });
+}
+
 function addReferenceData(db){
 
     var groups = [
@@ -98,4 +116,4 @@ function addReferenceData(db){
         }
       )
 }
-export {formatDateForId, addReferenceData, createDatabaseViews, createSaleViews}
+export {formatDateForId, addReferenceData, createDatabaseViews, createSaleViews, createSaleItemViews}
