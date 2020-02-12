@@ -247,7 +247,7 @@ export default {
           item.productId = product._id;
           item.quantity = 1;
           item.salePrice = parseFloat(product.price).toFixed(2);
-          item.name = product.shortName;
+          item.name = product.title;
           item.type = 'saleitem';
           var date = new Date()
           item.createdAt = date.toJSON();
