@@ -4,7 +4,7 @@ import POSSaleComponent from './components/sale.js';
 import SaleViewComponent from './components/listsales.js';
 
 import store from './components/vuexstate.js'
-import {formatDateForId, addReferenceData, createDatabaseViews} from './helpers.js';
+import {formatDateForId, addReferenceData, createDatabaseViews, createSaleViews} from './helpers.js';
 
 
 var db = new PouchDB('swanpos');
@@ -53,6 +53,9 @@ var app = new Vue({
     methods: {
       addReferenceData: function(){
         addReferenceData(remoteDb);
+      },
+      createViews: function(){
+        createSaleViews(remoteDb);
       },
       formatDateForId: formatDateForId,
       login: function(){

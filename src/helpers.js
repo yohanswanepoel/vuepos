@@ -33,6 +33,45 @@ function createDatabaseViews(db, remoteDb){
         remoteDb.put(view);
       });
 }
+
+function createSaleViews(db){
+    var salesByView = {
+            "_id": "_design/salesBy",
+            "views": {
+              "MonthTotal": {
+                "reduce": "_sum",
+                "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit(doc.createdAt.slice(0,7), Number(doc.total));\n  }\n}"
+              },
+              "YearTotal": {
+                "reduce": "_sum",
+                "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit(doc.createdAt.slice(0,4), Number(doc.total));\n  }\n}"
+              },
+              "DayTotal": {
+                "reduce": "_sum",
+                "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit(doc.createdAt.slice(0,10), Number(doc.total));\n  }\n}"
+              },
+              "DayCount": {
+                "reduce": "_count",
+                "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit(doc.createdAt.slice(0,10), Number(doc.total));\n  }\n}"
+              },
+              "MonthCount": {
+                "reduce": "_count",
+                "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit(doc.createdAt.slice(0,7), Number(doc.total));\n  }\n}"
+              },
+              "YearCount": {
+                "reduce": "_count",
+                "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit(doc.createdAt.slice(0,4), Number(doc.total));\n  }\n}"
+              }
+            },
+            "language": "javascript"
+          }
+    db.get('_design/salesBy').then(function(doc){
+        // The view exists do nothing
+    }).catch(function(res){
+        db.put(salesByView);
+    })
+    
+}
 function addReferenceData(db){
 
     var groups = [
@@ -74,4 +113,4 @@ function addReferenceData(db){
         }
       )
 }
-export {formatDateForId, addReferenceData, createDatabaseViews}
+export {formatDateForId, addReferenceData, createDatabaseViews, createSaleViews}
