@@ -37,10 +37,14 @@ function createDatabaseViews(db, remoteDb){
 function createSaleViews(db){
     var salesByView = {
         "_id": "_design/salesBy",
-        "_rev": "20-6e800ec9b7962c40af7296990b18b438",
+        "_rev": "22-1f8dc4b238f6619eae913c5955ddbce9",
         "views": {
           "sum": {
             "reduce": "_sum",
+            "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit([doc.createdAt.slice(0,4), doc.createdAt.slice(5,7), doc.createdAt.slice(8,10)], Number(doc.total));\n  }\n}"
+          },
+          "count": {
+            "reduce": "_count",
             "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit([doc.createdAt.slice(0,4), doc.createdAt.slice(5,7), doc.createdAt.slice(8,10)], Number(doc.total));\n  }\n}"
           }
         },
