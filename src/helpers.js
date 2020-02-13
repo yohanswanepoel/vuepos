@@ -41,11 +41,11 @@ function createSaleViews(db){
         "views": {
           "sum": {
             "reduce": "_sum",
-            "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit([doc.createdAt.slice(0,4), doc.createdAt.slice(5,7), doc.createdAt.slice(8,10)], Number(doc.total));\n  }\n}"
+            "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit([doc.createdAt.slice(0,4), doc.createdAt.slice(5,7), doc.createdAt.slice(8,10), doc.tender], Number(doc.total));\n  }\n}"
           },
           "count": {
             "reduce": "_count",
-            "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit([doc.createdAt.slice(0,4), doc.createdAt.slice(5,7), doc.createdAt.slice(8,10)], Number(doc.total));\n  }\n}"
+            "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit([doc.createdAt.slice(0,4), doc.createdAt.slice(5,7), doc.createdAt.slice(8,10), doc.tender], Number(doc.total));\n  }\n}"
           }
         },
         "language": "javascript"
