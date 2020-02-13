@@ -9,7 +9,7 @@ export default {
           errors: [],
           messages: [],
           summaries: [],
-          header: "Reports",
+          header: "Dashboard",
           deleteDoc: null,
           dateFrom: "",
           dateTo: "",
@@ -35,20 +35,17 @@ export default {
                 <div class="col-sm-6">
                     <h4>{{ header }}</h4>
                 </div>
-                <div class="col-sm-6">
-                  <a class="btn btn-success btn" v-on:click="applyFilter()"><i class="material-icons">&#xE147;</i>Filter</a>
-                </div>
               </div>
               <div class="row">
-                <div class="col-sm-3">
-                    <h5>Sales Today</h5>
-                </div>
-                <div class="col-sm-3">
-                    <h5>Product Sales</h5>
-                </div>
-                <div class="col-sm-3">
-                    <h5>Product Sales</h5>
-                </div>
+                  <div v-for="summary in summaries" class="card report-summaries">
+                    <div class="card-header">
+                      {{ summary.name }}
+                    </div>
+                    <div  class="card-body">
+                        <h4>{{ summary.value | currency }}</h4>
+                    </div>
+                  </div>
+                
               </div>
             </div>
             <p v-if="errors.length" class="alert alert-danger" role="alert">
@@ -76,52 +73,104 @@ export default {
         //this.$router.push({ name: 'editProduct', params: { id: product._id, heading: 'Edit Product' } })
 
       },
-      applyFilter(){
-
-      },
-      loadSales(fDate, tDate){
+      summarySalesDaily(fromDate, toDate, db){
         var self = this;
-        var db = this.$store.state.remoteDB;
-        var querykey_Today = formatDateForView(new Date());
-        var from_key = querykey_Today.push["a"];
-        var to_key = querykey_Today.push["z"];
-        // By year
-        db.query('salesBy/sum',{
-          reduce: true,
-          group_level: 1
-        }).then(function(result){
-          self.summaries.push({
-            name: "Sales Total By Year", rows: result});
-        });
-        // This Month
-        db.query('salesBy/sum',{
-          reduce: true,
-          group_level: 2
-        }).then(function(result){
-          self.summaries.push({
-            name: "Sales Total By Month", rows: result});
-        });
+        var from_key = formatDateForView(fromDate);
+        var to_key = formatDateForView(toDate);
+        from_key.push("a");
+        to_key.push("z");
+      
         // Today
         db.query('salesBy/sum',{
+          startkey: from_key,
+          endkey: to_key,
           reduce: true,
           group_level: 3
         }).then(function(result){
-          self.summaries.push({
-            name: "Sales Total By Day", rows: result});
+          var i = 0;
+          for (i = 0; i < result.rows.length; i++){
+            console.log(result.rows[i]);
+            self.summaries.push({
+              name: "Today Total: "  + result.rows[i].key[0] + "-" + result.rows[i].key[1] + "-" + result.rows[i].key[2] , value: result.rows[i].value});
+          }
         });
-        // Today by Tender
+      },
+      summarySalesDailyByTender(fromDate, toDate, db){
+        var self = this;
+        var from_key = formatDateForView(fromDate);
+        var to_key = formatDateForView(toDate);
+        from_key.push("a");
+        to_key.push("z");
+      
+        // Today
         db.query('salesBy/sum',{
+          startkey: from_key,
+          endkey: to_key,
           reduce: true,
-          group_level: 4,
-          startkey     : from_key,
-          endkey       : to_key,
+          group_level: 4
         }).then(function(result){
-          self.summaries.push({
-            name: "Sales Total Today by Tender", rows: result});
+          var i = 0;
+          for (i = 0; i < result.rows.length; i++){
+            console.log(result.rows[i]);
+            self.summaries.push({
+              name: "Today by " + result.rows[i].key[3], value: result.rows[i].value});
+          }
         });
-        console.log(self.summaries);
-        //startkey: ""+fDate,
-        //endkey: ""+tDate+"\ufff0"
+      },
+      summarySalesMonthly(fromDate, toDate, db){
+        var self = this;
+        var from_key = formatDateForView(fromDate);
+        var to_key = formatDateForView(toDate);
+        from_key.push("a");
+        to_key.push("z");
+        from_key[2] = "0";
+        to_key[2] = "9";
+        // This Month
+        db.query('salesBy/sum',{
+          startkey: from_key,
+          endkey: to_key,
+          reduce: true,
+          group_level: 2
+        }).then(function(result){
+          var i = 0;
+          for (i = 0; i < result.rows.length; i++){
+            self.summaries.push({
+              name: "Monthly Total: "  + result.rows[i].key[0] + "-" + result.rows[i].key[1], value: result.rows[i].value});
+          }
+        });
+      },
+      summarySalesYearly(fromDate, toDate, db){
+        var self = this;
+        var from_key = formatDateForView(fromDate);
+        var to_key = formatDateForView(toDate);
+        from_key.push("a");
+        to_key.push("z");
+        from_key[2] = "0";
+        to_key[2] = "9";
+        from_key[1] = "0";
+        to_key[1] = "99";
+        // By year
+        db.query('salesBy/sum',{
+          startkey: from_key,
+          endkey: to_key,
+          reduce: true,
+          group_level: 1
+        }).then(function(result){
+          var i = 0;
+          for (i = 0; i < result.rows.length; i++){
+            self.summaries.push({
+              name: "Yearly Total: " + result.rows[i].key[0], value: result.rows[i].value});
+          }
+        });
+      },
+      loadSales(fDate, tDate){
+        var db = this.$store.state.remoteDB;
+        var from_date = new Date();
+        var to_date = new Date()
+        this.summarySalesDaily(from_date, to_date, db);
+        this.summarySalesDailyByTender(from_date, to_date, db);
+        this.summarySalesMonthly(from_date, to_date, db);
+        this.summarySalesYearly(from_date, to_date, db);
       }
     },
     mounted() {
@@ -138,6 +187,9 @@ export default {
         var time = id.slice(13,15) + ":" +  id.slice(15,17);
         date = date + " " + time;
         return date;
+      },
+      currency: function(value){
+        return "$ " + value;
       }
     }
 };

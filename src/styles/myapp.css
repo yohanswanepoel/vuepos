@@ -72,3 +72,17 @@ html,
    padding-left: 0px; 
    padding-right: 0px;
 }
+
+.login-form {
+    padding-left: 20%; 
+    padding-right: 20%;
+    padding-top: 2%;
+}
+
+.report-summaries {
+    width: 18rem;
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}

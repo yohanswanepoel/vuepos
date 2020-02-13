@@ -81,7 +81,7 @@
                   <li v-for="message in messages">{{ message }}</li>
                 </ul>
               </p>
-              <form id="loginForm">
+              <form id="loginForm" class="login-form">
                 <div class="form-group">
                   <label for="userName">User Name</label>
                   <input v-model="user" type="text" class="form-control" id="userName" placeholder="User">
@@ -94,7 +94,7 @@
                   <label for="server">Password</label>
                   <input v-model="server" type="text" class="form-control" id="server" placeholder="Server">
                 </div>
-                <button type="button" class="btn btn-primary" v-on:click="login()">Login</button>
+                <button type="button" class="btn btn-primary float-right" v-on:click="login()">Login</button>
               </form>
             </div>
           </div>
