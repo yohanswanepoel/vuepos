@@ -21,8 +21,7 @@ export default {
        }
 	  },
   template: `
-    <div>
-      <h3>{{ header }}</h3>
+    <div> 
       <div class="container">
         <div class="row">
           <div class="col-9 overflow-auto"  style="height:100%">

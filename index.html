@@ -40,6 +40,9 @@
                 <li v-if="user_role=='admin'" class="nav-item">
                     <router-link class="nav-item nav-link" to="/listProducts">List Products</router-link>
                 </li>
+                <li v-if="user_role=='admin'" class="nav-item">
+                  <router-link class="nav-item nav-link" to="/reports">Reports</router-link>
+              </li>
               </ul>
             </div>
             <div v-if="user_role" class="collapse navbar-collapse" id="navbarNav">
@@ -51,7 +54,6 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="#">Reload App</a>
-                    <a class="dropdown-item" href="#">Manage Users</a>
                     <a class="dropdown-item" href="#">Reset Password</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" v-on:click="addReferenceData">Add Reference Data</a>

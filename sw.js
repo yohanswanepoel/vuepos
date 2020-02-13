@@ -22,6 +22,7 @@ var filesToCache = [
   '/src/components/listsales.js',
   '/src/components/product.js',
   '/src/components/sale.js',
+  '/src/components/reports.js',
   '/src/components/vuexstate.js',
   '/src/components/serverconfig.js'
 ];

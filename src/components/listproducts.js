@@ -7,7 +7,7 @@ export default {
           products: [],
           errors: [],
           messages: [],
-          header: "List Products",
+          header: "Products",
           deleteDoc: null
        }
 	  },
@@ -17,7 +17,7 @@ export default {
         <div class="table-title">
           <div class="row">
             <div class="col-sm-6">
-                <h2>{{ header }}</h2>
+                <h3>{{ header }}</h3>
             </div>
             <div class="col-sm-6">
               <router-link class="btn btn-success btn" to="/newProduct"><i class="material-icons">&#xE147;</i>New Product</router-link>

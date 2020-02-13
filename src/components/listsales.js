@@ -7,7 +7,7 @@ export default {
           products: [],
           errors: [],
           messages: [],
-          header: "List Sales",
+          header: "Sales",
           deleteDoc: null,
           dateFrom: "",
           dateTo: "",
@@ -20,7 +20,7 @@ export default {
         <div class="table-title">
           <div class="row">
             <div class="col-sm-6">
-                <h2>{{ header }}</h2>
+                <h3>{{ header }}</h3>
             </div>
             <div class="col-sm-6">
               <a class="btn btn-success btn" v-on:click="applyFilter()"><i class="material-icons">&#xE147;</i>Filter</a>

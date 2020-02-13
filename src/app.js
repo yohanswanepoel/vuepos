@@ -2,6 +2,7 @@ import ProductComponent from './components/product.js';
 import ProductViewComponent from './components/listproducts.js';
 import POSSaleComponent from './components/sale.js';
 import SaleViewComponent from './components/listsales.js';
+import ReportsComponent from './components/reports.js';
 
 import store from './components/vuexstate.js'
 import {formatDateForId, addReferenceData, createDatabaseViews, createSaleViews} from './helpers.js';
@@ -19,6 +20,7 @@ var remoteDb = null;
     { name: 'listSales', path: '/listSales', component: SaleViewComponent },
     { name: 'newProduct', path: '/newProduct', component: ProductComponent, props: { header : 'Create New Product' } },
     { name: 'listProducts', path: '/listProducts', component: ProductViewComponent },
+    { name: 'reports', path: '/reports', component: ReportsComponent},
     { name: 'editProduct', path: '/editProduct/:id', component: ProductComponent, props: { header : 'Update Product' }}
   ]
 
@@ -205,7 +207,7 @@ var app = new Vue({
         this.$store.state.user_role = null;
         this.$store.state.connected = true;
         this.$store.state.today = this.formatDateForId(new Date());
-        var debug = false;
+        var debug = true;
         if (debug){
           this.user = "posadmin";
           this.user_role = "admin";

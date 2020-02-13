@@ -62,3 +62,13 @@ html,
     float: left;
     margin-top: 2px;
 }
+
+.container {
+    padding-left: 0px; 
+    padding-right: 0px;
+}
+
+.container-fluid {
+   padding-left: 0px; 
+   padding-right: 0px;
+}
