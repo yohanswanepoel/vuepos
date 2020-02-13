@@ -216,17 +216,6 @@ export default {
         this.summarySalesYearly(from_date, to_date, db);
       },
       chartsLastXDays(){
-        /*var chartData = {
-          //labels: ["S", "M", "T", "W", "T", "F", "S"],
-          datasets: [{
-            data: [589, 445, 483, 503, 689, 692, 634],
-          },
-          {
-            data: [639, 465, 493, 478, 589, 632, 674],
-          }]
-        };
-        this.chartDataByDay = chartData;*/
-        
         
         var chLine = document.getElementById("lastxdays");
         if (chLine) {
