@@ -11,6 +11,19 @@ function formatDateForId(date){
     return year + "" + month + "" + day;
 }
 
+function formatDateForView(date){
+    var year = date.getFullYear();
+    var month = "" + (date.getMonth() + 1);
+    var day = "" + date.getDate();
+    if (month.length < 2){
+        month = "0" + month;
+    }
+    if (day.length < 2){
+        day = "0" + day;
+    }
+    return [year,month,day];
+}
+
 function createDatabaseViews(db, remoteDb){
     var view = {
         _id: '_design/byTypeDesign',
@@ -116,4 +129,9 @@ function addReferenceData(db){
         }
       )
 }
-export {formatDateForId, addReferenceData, createDatabaseViews, createSaleViews, createSaleItemViews}
+export {formatDateForId, 
+    addReferenceData, 
+    createDatabaseViews, 
+    createSaleViews, 
+    createSaleItemViews,
+    formatDateForView}

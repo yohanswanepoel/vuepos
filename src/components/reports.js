@@ -1,3 +1,5 @@
+formatDateForView
+import {formatDateForView} from '../helpers.js';
 
 export default {
   name: 'ReportsComponent',
@@ -6,6 +8,7 @@ export default {
           products: [],
           errors: [],
           messages: [],
+          summaries: [],
           header: "Reports",
           deleteDoc: null,
           dateFrom: "",
@@ -79,17 +82,46 @@ export default {
       loadSales(fDate, tDate){
         var self = this;
         var db = this.$store.state.remoteDB;
-        db.allDocs({
-          include_docs: true,
-          startkey: "sale:"+fDate,
-          endkey: "sale:"+tDate+"\ufff0"
+        var querykey_Today = formatDateForView(new Date());
+        var from_key = querykey_Today.push["a"];
+        var to_key = querykey_Today.push["z"];
+        // By year
+        db.query('salesBy/sum',{
+          reduce: true,
+          group_level: 1
         }).then(function(result){
-          self.products = result.rows;
-          //console.log(self.products);
-          //console.log(self.products[0].doc._id);
-        }).catch(function(err){
-          console.log(err);
-        })
+          self.summaries.push({
+            name: "Sales Total By Year", rows: result});
+        });
+        // This Month
+        db.query('salesBy/sum',{
+          reduce: true,
+          group_level: 2
+        }).then(function(result){
+          self.summaries.push({
+            name: "Sales Total By Month", rows: result});
+        });
+        // Today
+        db.query('salesBy/sum',{
+          reduce: true,
+          group_level: 3
+        }).then(function(result){
+          self.summaries.push({
+            name: "Sales Total By Day", rows: result});
+        });
+        // Today by Tender
+        db.query('salesBy/sum',{
+          reduce: true,
+          group_level: 4,
+          startkey     : from_key,
+          endkey       : to_key,
+        }).then(function(result){
+          self.summaries.push({
+            name: "Sales Total Today by Tender", rows: result});
+        });
+        console.log(self.summaries);
+        //startkey: ""+fDate,
+        //endkey: ""+tDate+"\ufff0"
       }
     },
     mounted() {
