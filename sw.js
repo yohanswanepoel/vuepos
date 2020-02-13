@@ -11,6 +11,7 @@ var filesToCache = [
   '/src/deps/pouchdb.authentication.min.js',
   '/src/deps/vue.js',
   '/src/deps/vuex.js',
+  '/src/deps/charts.min.js',
   '/src/deps/vue-router.js',
   '/src/deps/popper.min.js',
   '/src/deps/bootstrap.min.js',
