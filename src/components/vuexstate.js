@@ -3,7 +3,8 @@ export default new Vuex.Store({
       db: null ,
       user: "test_user",
       user_role: null,
-      remoteDB: null
+      remoteDB: null,
+      loggedIn: false,
     },
     
     getters: {
@@ -14,6 +15,11 @@ export default new Vuex.Store({
       // Here we will create Jenny
       updateRemoteDB(state, db){
         state.remoteDB = db;
+      },
+      updateUserInformation(state, user, role, loggedIn){
+        state.loggedIn = loggedIn;
+        state.user = user;
+        state.user_role = role;
       }
     },
     

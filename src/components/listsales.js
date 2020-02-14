@@ -4,14 +4,21 @@ export default {
   name: 'SaleViewComponent',
   data() {
 		  return { 
-          products: [],
+          sales: [],
           errors: [],
           messages: [],
           header: "Sales",
           deleteDoc: null,
           dateFrom: "",
           dateTo: "",
-          filterType: "Year"
+          filterType: "Year",
+          total_rows: 0,
+          result_total_size: 0, // total_rows - offset,
+          results_per_page: 4,
+          next_start_key: null,
+          previous_start_key: null,
+          current_page: 1,
+          to_date: "",
        }
 	  },
   template: `
@@ -23,6 +30,9 @@ export default {
                 <h3>{{ header }}</h3>
             </div>
             <div class="col-sm-6">
+              {{ pageCount }}
+              <a v-if="next_start_key" class="btn btn-success btn" v-on:click="nextPage()"><i class="material-icons">&#xE147;</i>Next Page</a>
+              <a v-if="previous_start_key" class="btn btn-success btn" v-on:click="previousPage()"><i class="material-icons">&#xE147;</i>Previous Page</a>
               <a class="btn btn-success btn" v-on:click="applyFilter()"><i class="material-icons">&#xE147;</i>Filter</a>
             </div>
           </div>
@@ -64,10 +74,10 @@ export default {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in products">
-              <td colspan="1">{{ item.doc._id | dateFromID }}</td>
-              <td colspan="3">{{ item.doc.total }}</td>
-              <td colspan="1">{{ item.doc.tender }}</td>
+            <tr v-for="item in sales">
+              <td colspan="1">{{ item.key | dateFromID }}</td>
+              <td colspan="3">{{ item.value.total | currency }}</td>
+              <td colspan="1">{{ item.value.tender }}</td>
               <td>
                 <a href="#" class="edit" v-on:click="rowclicked(item.doc)"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
               </td>
@@ -112,22 +122,33 @@ export default {
       applyFilter(){
         this.errors = [];
         if (this.filterType == "Clear"){
+          this.to_date = "";
           this.loadSales("","");
         }else {
           if (this.dateFrom == "" || this.dateTo == ""){
             this.errors.push("Please specify dates");
           } else if (this.filterType == "Year"){
-            this.loadSales(this.dateFrom.slice(0,4), this.dateTo.slice(0,4));
+            this.loadSales("sale:" + this.dateFrom.slice(0,4), "sale:" + this.dateTo.slice(0,4));
           }else if(this.filterType == "Month"){
-            var from = this.dateFrom.slice(0,4) + "" + this.dateFrom.slice(5,7);
-            var to = this.dateTo.slice(0,4) + "" + this.dateTo.slice(5,7);
+            var from = "sale:" + this.dateFrom.slice(0,4) + "" + this.dateFrom.slice(5,7);
+            var to = "sale:" + this.dateTo.slice(0,4) + "" + this.dateTo.slice(5,7);
+            this.to_date = to;
             this.loadSales(from, to);
           }else if(this.filterType == "Day"){
-            var from = this.dateFrom.slice(0,4) + "" + this.dateFrom.slice(5,7) + "" + this.dateFrom.slice(8,10);
-            var to = this.dateTo.slice(0,4) + "" + this.dateTo.slice(5,7) + "" + this.dateTo.slice(8,10);
+            var from = "sale:" + this.dateFrom.slice(0,4) + "" + this.dateFrom.slice(5,7) + "" + this.dateFrom.slice(8,10);
+            var to = "sale:" + this.dateTo.slice(0,4) + "" + this.dateTo.slice(5,7) + "" + this.dateTo.slice(8,10);
+            this.to_date = to;
             this.loadSales(from, to)
           }
         }
+      },
+      previousPage(){
+        this.next_start_key = this.previous_start_key; //Can only go back 1
+        this.loadSales(this.next_start_key,this.to_date)
+      },
+      nextPage(){
+        this.previous_start_key = this.next_start_key;
+        this.loadSales(this.next_start_key,this.to_date)
       },
       deleteSelected(tiem){
         //this.deleteDoc = item;
@@ -151,17 +172,22 @@ export default {
       loadSales(fDate, tDate){
         var self = this;
         var db = this.$store.state.remoteDB;
-        db.allDocs({
-          include_docs: true,
-          startkey: "sale:"+fDate,
-          endkey: "sale:"+tDate+"\ufff0"
+        console.log("Start: " + fDate);
+        console.log("End: " + tDate + "\ufff0");
+        db.query('salesBy/sales',{
+          limit: self.results_per_page + 1, //Need 1 more to determine next startKey
+          startkey: ""+fDate,
+          endkey: ""+tDate+"\ufff0"
         }).then(function(result){
-          self.products = result.rows;
-          //console.log(self.products);
-          //console.log(self.products[0].doc._id);
-        }).catch(function(err){
-          console.log(err);
-        })
+          console.log(result);
+          if (result.rows.length > self.results_per_page){
+            self.next_start_key = result.rows[self.results_per_page].key;
+            result.rows.pop();
+          }
+          self.sales = result.rows;
+          self.total_rows = result.total_rows;
+          self.result_total_size = result.total_rows - result.offset;
+        });
       }
     },
     mounted() {
@@ -171,6 +197,15 @@ export default {
       this.loadSales("","")
       // Get all the products
     },
+    computed: {
+      pageCount: function(){
+        var message = "Records: ";
+        message += this.result_total_size
+        message = message + " | " + this.current_page;
+        message = message + " of " + Math.ceil(this.result_total_size / this.results_per_page)
+        return message;
+      }
+    },
     filters: {
       dateFromID: function(id){
         if (!id) return '';
@@ -178,6 +213,9 @@ export default {
         var time = id.slice(13,15) + ":" +  id.slice(15,17);
         date = date + " " + time;
         return date;
+      },
+      currency: function(value){
+        return "$ " + value;
       }
     }
 };

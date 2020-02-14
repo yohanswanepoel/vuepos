@@ -91,12 +91,12 @@ var app = new Vue({
             }
             self.loggedIn = true;
             //@Todo Put this function somewhere else
+            self.$store.commit('updateUserInformation',self.user, self.user_role, true);
             self.create_db_views();
             self.database_compact();
             self.database_push();
             self.database_sync();
           });
-
         }
 
       },
@@ -106,6 +106,7 @@ var app = new Vue({
         this.loggedIn = false;
         // @TODO Stop sync
         this.sync_down.cancel();
+        this.$store.commit('setAuth',null, null, false);
         this.$router.push({ name: 'login'}).then(function(res){
           // Ignore
           console.log("Logged Out");
