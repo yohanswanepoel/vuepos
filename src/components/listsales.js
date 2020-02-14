@@ -19,6 +19,7 @@ export default {
           previous_start_key: null,
           current_page: 1,
           to_date: "",
+          page_start_keys: []
        }
 	  },
   template: `
@@ -147,6 +148,7 @@ export default {
         this.loadSales(this.next_start_key,this.to_date)
       },
       nextPage(){
+        this.current_page ++;
         this.previous_start_key = this.next_start_key;
         this.loadSales(this.next_start_key,this.to_date)
       },
@@ -185,8 +187,10 @@ export default {
             result.rows.pop();
           }
           self.sales = result.rows;
-          self.total_rows = result.total_rows;
-          self.result_total_size = result.total_rows - result.offset;
+          if (self.total_rows == 0){
+            self.total_rows = result.total_rows;
+            self.result_total_size = result.total_rows - result.offset;
+          }
         });
       }
     },
