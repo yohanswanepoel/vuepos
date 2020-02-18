@@ -59,7 +59,7 @@ The following design principles apply
 ** plaintext_password: Choose a password
 
 * Role: posadmin . This user requires database access privileges. You can do this in the CouchDB UI. The use document could look like this
-`
+```
   {
     "_id": "org.couchdb.user:username",
     "name": "display name",
@@ -67,9 +67,9 @@ The following design principles apply
     "roles": ['admin'],
     "password": "plaintext_password"
   }
-`
+```
 * Role: superadmin . This user requires database admin privileges. You can do this in the CouchDB UI
-`
+```
   {
     "_id": "org.couchdb.user:username",
     "name": "display name",
@@ -77,9 +77,9 @@ The following design principles apply
     "roles": ['superadmin'],
     "password": "password"
   }
-`
+```
 * Role: pos . This user requires database access privilages. You can do this in the CouchDB UI
-`
+```
   {
     "_id": "org.couchdb.user:username",
     "name": "display name",
@@ -87,18 +87,20 @@ The following design principles apply
     "roles": ['pos'],
     "password": "plaintext_password"
   }
-`
+```
 
 * Add users to database roles
 ** Then you can create per database authentication by creating document with id "_security" in specific database which is not versioned, e.g.
 ** members are normal users, they can query and update data. This example pos and posadmin
 ** admins are special users, that can create views and design documents. This example posadmin
-`
+```
  {"members":{"names":["pos","posadmin"],"roles":[]},"admins":{"names":["posadmin"]}}
-`
+```
 
 test users
-` curl -u [user]:[password] http://localhost:5984/swanepos/_all_docs `
+```
+curl -u [user]:[password] http://localhost:5984/swanepos/_all_docs 
+```
 
 ## Production runtime options
 Options being considered
