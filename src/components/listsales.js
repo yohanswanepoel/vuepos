@@ -11,14 +11,13 @@ export default {
           deleteDoc: null,
           dateFrom: "",
           dateTo: "",
-          filterType: "Year",
+          filterType: "Clear",
           total_rows: 0,
           result_total_size: 0, // total_rows - offset,
-          results_per_page: 4,
-          next_start_key: null,
-          previous_start_key: null,
+          results_per_page: 15,
           current_page: 1,
           to_date: "",
+          has_more_pages: false,
           page_start_keys: []
        }
 	  },
@@ -31,12 +30,25 @@ export default {
                 <h3>{{ header }}</h3>
             </div>
             <div class="col-sm-6">
-              {{ pageCount }}
-              <a v-if="next_start_key" class="btn btn-success btn" v-on:click="nextPage()"><i class="material-icons">&#xE147;</i>Next Page</a>
-              <a v-if="previous_start_key" class="btn btn-success btn" v-on:click="previousPage()"><i class="material-icons">&#xE147;</i>Previous Page</a>
-              <a class="btn btn-success btn" v-on:click="applyFilter()"><i class="material-icons">&#xE147;</i>Filter</a>
+              <a class="btn btn-primary" v-on:click="applyFilter()"><i class="material-icons">filter_list</i>Filter</a>
+              <label for="exampleSelect1">Filter Type</label>
+              <select v-model="filterType" id="exampleSelect1">
+                <option>Clear</option>
+                <option>Year</option>
+                <option>Month</option>
+                <option>Day</option>
+              </select>
+              <div v-if="filterType=='Day'">
+              From:<input v-model="dateFrom" type="date"  id="activeFrom" placeholder="0.0">
+              To:<input v-model="dateTo" type="date"  id="activeFrom" placeholder="0.0">
+              </div>
+              <div v-if="filterType=='Month' || filterType=='Year'">
+              From:<input v-model="dateFrom" type="month"  id="activeFrom" placeholder="0.0">
+              To:<input v-model="dateTo" type="month"  id="activeFrom" placeholder="0.0">
+              </div>
             </div>
           </div>
+          
         </div>
         <p v-if="errors.length" class="alert alert-danger" role="alert">
               <b>Please correct the following error(s):</b>
@@ -52,22 +64,10 @@ export default {
         <table class="table table-striped table-hover  table-sm">
           <thead>
             <tr>
-              <th scope="col" colspan="1">Date : 
-                <label for="exampleSelect1">Filter Type</label>
-                <select v-model="filterType" id="exampleSelect1">
-                  <option>Clear</option>
-                  <option>Year</option>
-                  <option>Month</option>
-                  <option>Day</option>
-                </select>
-              <div v-if="filterType=='Day'">
-              From:<input v-model="dateFrom" type="date"  id="activeFrom" placeholder="0.0">
-              To:<input v-model="dateTo" type="date"  id="activeFrom" placeholder="0.0">
-              </div>
-              <div v-if="filterType=='Month' || filterType=='Year'">
-              From:<input v-model="dateFrom" type="month"  id="activeFrom" placeholder="0.0">
-              To:<input v-model="dateTo" type="month"  id="activeFrom" placeholder="0.0">
-              </div>
+              <th scope="col" colspan="1">
+                <div class="col-sm">
+                  
+                </div>
               </th>
               <th scope="col" colspan="3">Value</th>
               <th scope="col" colspan="1">Tender</th>
@@ -88,6 +88,17 @@ export default {
             </tr>
           </tbody>
         </table>
+        <div class="table-title">
+          <div class="row">
+              <div class="col-sm-4">
+                <a v-if="showPreviousPage()" class="btn btn-secondary" v-on:click="previousPage()"><i class="material-icons">navigate_before</i>Previous Page</a>
+              </div>
+              <div class="col-sm-3">
+                {{ pageCount }}
+                <a v-if="showNextPage()" class="btn btn-secondary" v-on:click="nextPage()"><i class="material-icons">navigate_next</i>Next Page</a>
+              </div>
+          </div>
+        </div>
       </div>
       <!-- Delete Modal HTML -->
       <div id="deleteItemModal" class="modal fade">
@@ -122,6 +133,10 @@ export default {
       },
       applyFilter(){
         this.errors = [];
+        this.page_start_keys = [];
+        this.current_page = 1;
+        this.result_total_size = 0;
+        this.total_rows = 0;
         if (this.filterType == "Clear"){
           this.to_date = "";
           this.loadSales("","");
@@ -143,14 +158,19 @@ export default {
           }
         }
       },
+      showPreviousPage(){
+        return this.current_page != 1;
+      },
+      showNextPage(){
+        return this.current_page != Math.ceil(this.result_total_size / this.results_per_page)
+      },
       previousPage(){
-        this.next_start_key = this.previous_start_key; //Can only go back 1
-        this.loadSales(this.next_start_key,this.to_date)
+        this.current_page = this.current_page - 1;
+        this.loadSales(this.page_start_keys[this.current_page - 1],this.to_date)
       },
       nextPage(){
-        this.current_page ++;
-        this.previous_start_key = this.next_start_key;
-        this.loadSales(this.next_start_key,this.to_date)
+        this.current_page++;
+        this.loadSales(this.page_start_keys[this.current_page - 1],this.to_date)
       },
       deleteSelected(tiem){
         //this.deleteDoc = item;
@@ -174,16 +194,16 @@ export default {
       loadSales(fDate, tDate){
         var self = this;
         var db = this.$store.state.remoteDB;
-        console.log("Start: " + fDate);
-        console.log("End: " + tDate + "\ufff0");
+        if (this.page_start_keys.length == 0){
+          this.page_start_keys.push(fDate);
+        }
         db.query('salesBy/sales',{
           limit: self.results_per_page + 1, //Need 1 more to determine next startKey
           startkey: ""+fDate,
           endkey: ""+tDate+"\ufff0"
         }).then(function(result){
-          console.log(result);
           if (result.rows.length > self.results_per_page){
-            self.next_start_key = result.rows[self.results_per_page].key;
+            self.page_start_keys.push(result.rows[self.results_per_page].key);
             result.rows.pop();
           }
           self.sales = result.rows;

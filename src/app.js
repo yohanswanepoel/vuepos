@@ -106,7 +106,7 @@ var app = new Vue({
         this.loggedIn = false;
         // @TODO Stop sync
         this.sync_down.cancel();
-        this.$store.commit('setAuth',null, null, false);
+        this.$store.commit('updateUserInformation',null, null, false);
         this.$router.push({ name: 'login'}).then(function(res){
           // Ignore
           console.log("Logged Out");

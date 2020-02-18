@@ -25,8 +25,6 @@ export default {
           <div class="sidebar-sticky>
             <ul class="nav flex-column>
               <li class="nav-item">Dashboard</li>
-            <li class="nav-item">Sales</li>
-            <li class="nav-item">Products</li>
             </ul>
           </div>
         </nav>

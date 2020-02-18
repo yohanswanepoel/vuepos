@@ -54,11 +54,11 @@
                     <i class="material-icons">settings</i>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Reload App</a>
-                    <a class="dropdown-item" href="#">Reset Password</a>
+                    <a v-if="user_role=='superAdmin'" class="dropdown-item" href="#" disabled>Reload App</a>
+                    <a v-if="user_role=='superAdmin'"  class="dropdown-item" href="#" disabled>Reset Password</a v-if="user_role=='superAdmin'">
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" v-on:click="addReferenceData">Add Reference Data</a>
-                    <a class="dropdown-item" v-on:click="createViews">Add Reference Data</a>
+                    <a v-if="user_role=='superAdmin'"  class="dropdown-item" v-on:click="addReferenceData()">Add Reference Data</a v-if="user_role=='superAdmin'">
+                    <a v-if="user_role=='superAdmin'"  class="dropdown-item" v-on:click="createViews()">Create Views</a v-if="user_role=='superAdmin'">
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" v-on:click="logOut()">Log Out</a>
                   </div>
