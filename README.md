@@ -1,7 +1,7 @@
 # Small POS
 This is a small scale Point of Sale systemn designed for a school canteen. 
 
-It also served as a learning experience to see how certain capabilities can be used together.
+It also served as a learning experience to see how certain capabilities can be used together. 
 
 ## Design Principles and Considerations
 The following design principles apply
@@ -80,10 +80,13 @@ Client-side
 
 ## Interesting Lessons learned along the way
 * Vue Router and components using JS files
-* VueX manipulation of session data
+* VueX manipulation of session data through mutations
 * CouchDB/PouchDB replication management using filters
 * Map/Reduce jobs in CouchDB
 * CouchDB logical id fields they are awesome: https://pouchdb.com/2014/06/17/12-pro-tips-for-better-code-with-pouchdb.html
 * Pagination using id fields and an array to keep track - pretty neat
 * CouchDB authentication
+* Vue flow: Mounted, Created ect
+* Vue Computed Fields
+* Vue Filters
 
