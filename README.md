@@ -53,12 +53,41 @@ The following design principles apply
 
 ### User setup
 * Create 3 users
-* Role: posadmin . This user requires database access privileges. You can do this in the CouchDB UI
+* Replace values
+** username: Choose a name
+** display name: Choose a name
+** plaintext_password: Choose a password
 
+* Role: posadmin . This user requires database access privileges. You can do this in the CouchDB UI. The use document could look like this
+`
+  {
+    "_id": "org.couchdb.user:username",
+    "name": "display name",
+    "type": "user",
+    "roles": ['admin'],
+    "password": "plaintext_password"
+  }
+`
 * Role: superadmin . This user requires database admin privileges. You can do this in the CouchDB UI
-
+`
+  {
+    "_id": "org.couchdb.user:username",
+    "name": "display name",
+    "type": "user",
+    "roles": ['superadmin'],
+    "password": "password"
+  }
+`
 * Role: pos . This user requires database access privilages. You can do this in the CouchDB UI
-
+`
+  {
+    "_id": "org.couchdb.user:username",
+    "name": "display name",
+    "type": "user",
+    "roles": ['pos'],
+    "password": "plaintext_password"
+  }
+`
 
 test users
 ` curl -u [user]:[password] http://localhost:5984/swanepos/_all_docs `
