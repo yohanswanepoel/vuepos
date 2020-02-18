@@ -50,17 +50,19 @@ function createDatabaseViews(db, remoteDb){
 function createSaleViews(db){
     var salesByView = {
         "_id": "_design/salesBy",
-        "_rev": "22-1f8dc4b238f6619eae913c5955ddbce9",
         "views": {
-          "sum": {
-            "reduce": "_sum",
-            "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit([doc.createdAt.slice(0,4), doc.createdAt.slice(5,7), doc.createdAt.slice(8,10), doc.tender], Number(doc.total));\n  }\n}"
+            "sum": {
+              "reduce": "_sum",
+              "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit([doc.createdAt.slice(0,4), doc.createdAt.slice(5,7), doc.createdAt.slice(8,10), doc.tender], Number(doc.total));\n  }\n}"
+            },
+            "count": {
+              "reduce": "_count",
+              "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit([doc.createdAt.slice(0,4), doc.createdAt.slice(5,7), doc.createdAt.slice(8,10), doc.tender], Number(doc.total));\n  }\n}"
+            },
+            "sales": {
+              "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit(doc._id, { tender: doc.tender, total: Number(doc.total)});\n  }\n}"
+            }
           },
-          "count": {
-            "reduce": "_count",
-            "map": "function (doc) {\n  if(doc.type == 'sale'){\n    emit([doc.createdAt.slice(0,4), doc.createdAt.slice(5,7), doc.createdAt.slice(8,10), doc.tender], Number(doc.total));\n  }\n}"
-          }
-        },
         "language": "javascript"
       };
     db.get('_design/salesBy').then(function(doc){
@@ -87,6 +89,8 @@ function createSaleItemViews(db){
         db.put(salesByView);
     });
 }
+
+
 
 function addReferenceData(db){
 
