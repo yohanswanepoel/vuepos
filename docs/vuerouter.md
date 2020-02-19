@@ -39,7 +39,7 @@ router,
 
 ```
 
-## Generate links in HTMl 5
+## Generate links in HTML
 
 In the [index.html](../app/index.html) file you can see examples of how the router-link is used. These generate ```<href>``` components and to field corresponds to the path defined in the router.
 
