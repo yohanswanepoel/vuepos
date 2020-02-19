@@ -1,7 +1,7 @@
 # Replication
 Replication is relatively straight forward and can be setup to require authentication if user setup is done correctly. 
 
-In this app replication is setup as part of succesful login in app.js(../app/app.js) in the login function under the vue methods section. 
+In this app replication is setup as part of succesful login in [app.js](../app/app.js) in the login function under the vue methods section. 
 
 See the following methods:
 ```javascript
@@ -33,11 +33,11 @@ localDB.sync(remoteDB).on('complete', function () {
 ## Using Filters
 Advanced replication. Specifically the application uses filtered replication. This allows me to control which documents are replicated to and from server. For instance, sales are only pushed up to the server and then removed from the client if replication is successful. 
 
-The design document is defined in the createDatabaseViews function in helpers.js(../app/helpers.js)
+The design document is defined in the createDatabaseViews function in [helpers.js](../app/helpers.js)
 
 Retry is set to true in both instances. The replication will retry itself it disconnects.
 
-# Synchronisation both ways
+## Synchronisation both ways
 ```javascript
     // Synchronises objects of type product. This requires a design document. byTypeDesign/byTypeFilter
 db.sync(this.remoteDbstr, {
@@ -48,7 +48,7 @@ db.sync(this.remoteDbstr, {
 }).;
 ```
 
-# Replication sale items from client to server only and then remove them
+## Replication sale items from client to server only and then remove them
 ```javascript
 
  var sale_rep = db.replicate.to(this.remoteDbstr, {

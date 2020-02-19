@@ -130,7 +130,7 @@ Client-side
 ## <a name="lessons"></a>Interesting Lessons learned along the way
 * Vue Router and components using JS files
 * VueX manipulation of session data through mutations
-* CouchDB/PouchDB replication management using filters
+* [Replication managed direction using filters and removing local copies](docs/replication.md)
 * Map/Reduce jobs in CouchDB
 * CouchDB logical "_id" fields they are awesome: https://pouchdb.com/2014/06/17/12-pro-tips-for-better-code-with-pouchdb.html
 * Pagination using id fields and an array to keep track - pretty neat
