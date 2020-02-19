@@ -47,6 +47,17 @@ In the [index.html](../app/index.html) file you can see examples of how the rout
 <router-link class="nav-item nav-link" to="/newSale">New Sale</router-link>        
 ```
 
+## Router access parameters
+Javascript compnonent pushing route with an ID
+```javascript
+this.$router.push({ name: 'editProduct', params: { id: product._id, heading: 'Edit Product' } })
+
+```
+Access the ID in the compnent
+```javascript
+var pid = this.$route.params.id;
+```
+
 ## Router usage from javascript
 In the [app.js](../app/app.js) see the logout method for an example of using routes from the javascript. The push method uses the name defined in the router.
 

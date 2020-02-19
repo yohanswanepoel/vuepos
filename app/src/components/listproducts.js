@@ -121,8 +121,6 @@ export default {
           endkey: "product\ufff0"
         }).then(function(result){
           self.products = result.rows;
-          //console.log(self.products);
-          //console.log(self.products[0].doc._id);
         }).catch(function(err){
           console.log(err);
         })
