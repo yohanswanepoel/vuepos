@@ -5,14 +5,21 @@ It also served as a learning experience to see how certain capabilities can be u
 
 # Sections
 * [Design principles and considerations](#dpc)
+* [Technologies Used](#tech)
+* [User Roles Required](#user)
+* [Connectivity Requirements](#conn)
+* [Setup Dev](#setupdev)
+* [Setup Prod](#setupprod)
+* [Todo](#todo)
+* [Lessons Learned](#lessons)
 
-## Design Principles and Considerations <a name="dpc"></a>
+## <a name="dpc"></a>Design Principles and Considerations 
 The following design principles apply
 * It needs to be simple to setup and manage. Canteen staff are not IT nerds
 * Intermittened connections should not cause failures
 * Database backups should be seamless
 
-## Technologies Used
+## <a name="tech"></a>Technologies Used
 ### User Interface
 * Vue for the reactive web front-end capabilities
 * Vuex for session management
@@ -36,19 +43,19 @@ The following design principles apply
 * Couch DB authentication
 
 
-## User roles required
+## <a name="user"></a>User roles required
 * Role: pos: Use Point of Sale capability only
 * Role: admin: Can manage products, view sales and reports
 * Role: superadmin: Can create views and populate reference data from the App
 
-## Connectivity Requirements
+## <a name="conn"></a>Connectivity Requirements
 * Authentication requires connectivity
 * Once authenticated: 
 ** Point of Sale writes to PouchDB -> Sales are synchronised up to Couch DB
 ** Product management writes to PouchDB <-> Two way synchronisation
 * Reports require online connectivity and talks to CouchDB directly
 
-## Setup development environment
+## <a name="setupdev"></a>Setup development environment
 ### Requirements
 * Database: CouchDB - good tutorial: https://pouchdb.com/guides/setup-couchdb.html
 * Progressive Web Apps: A compatible browser
@@ -105,7 +112,7 @@ test users
 curl -u [user]:[password] http://localhost:5984/swanepos/_all_docs 
 ```
 
-## Production runtime options
+## <a name="setupprod"></a>Production runtime options
 Options being considered
 * Couch-as-a-Service: GCP, IBM Cloud?, with a webserver to serve content
 * Couch, proxy/webserver (Candy) on a RaspberryPi with Wifi Hotspot
@@ -114,13 +121,13 @@ Options being considered
 Client-side
 * Android or IPad devices would work fine
 
-## ToDo
+## <a name="todo"></a>ToDo
 * Build out reports
 * Update app content through service workers for new versions
 * Build containerised pattern using Podman and Buildah
 * Build kubernetes files likely targetting OpenShift
 
-## Interesting Lessons learned along the way
+## <a name="lessons"></a>Interesting Lessons learned along the way
 * Vue Router and components using JS files
 * VueX manipulation of session data through mutations
 * CouchDB/PouchDB replication management using filters
