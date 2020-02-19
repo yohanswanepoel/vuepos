@@ -128,7 +128,7 @@ Client-side
 * Build kubernetes files likely targetting OpenShift
 
 ## <a name="lessons"></a>Interesting Lessons learned along the way
-* Vue Router and components using JS files
+* [Vue Router and components using JS files](docs/vuerouter.md)
 * VueX manipulation of session data through mutations
 * [Replication managed direction using filters and removing local copies](docs/replication.md)
 * Map/Reduce jobs in CouchDB
