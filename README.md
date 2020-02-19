@@ -130,7 +130,7 @@ Client-side
 ## <a name="lessons"></a>Interesting Lessons learned along the way
 * [Vue Router using JS files](docs/vuerouter.md)
 * [Vue components](docs/vuecomponents.md) - there is a better way, but hey
-* VueX manipulation of session data through mutations
+* [Vuex session management](docs/vuex.md)
 * [Replication managed direction using filters and removing local copies](docs/replication.md)
 * Map/Reduce jobs in CouchDB
 * CouchDB logical "_id" fields they are awesome: https://pouchdb.com/2014/06/17/12-pro-tips-for-better-code-with-pouchdb.html

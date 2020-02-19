@@ -12,7 +12,6 @@ export default new Vuex.Store({
     },
     
     mutations: {
-      // Here we will create Jenny
       updateRemoteDB(state, db){
         state.remoteDB = db;
       },
