@@ -131,7 +131,7 @@ var app = new Vue({
           // replication was paused, usually because of a lost connection
           console.log('paused sale');
         }).on('change', function(change){
-          console.log(change);
+          // Changes is replicated up so remove local copy
           var i = 0;
           for (i = 0; i < change.docs.length; i++){
             db.get(change.docs[i]._id).then(function(doc){
@@ -140,8 +140,6 @@ var app = new Vue({
           }
         }).on('error', function (err) {
           // totally unhandled error (shouldn't happen)
-         
-          
           console.log(err);
         });
 
