@@ -31,6 +31,8 @@ localDB.sync(remoteDB).on('complete', function () {
 ```
 
 ## Using Filters
+See: https://pouchdb.com/2015/04/05/filtered-replication.html
+
 Advanced replication. Specifically the application uses filtered replication. This allows me to control which documents are replicated to and from server. For instance, sales are only pushed up to the server and then removed from the client if replication is successful. 
 
 The design document is defined in the createDatabaseViews function in [helpers.js](../app/helpers.js)
