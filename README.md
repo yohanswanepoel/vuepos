@@ -3,7 +3,10 @@ This is a small scale Point of Sale systemn designed for a school canteen.
 
 It also served as a learning experience to see how certain capabilities can be used together. 
 
-## Design Principles and Considerations
+# Sections
+* [Design principles and considerations](#dpc)
+
+## Design Principles and Considerations <a name="dpc"></a>
 The following design principles apply
 * It needs to be simple to setup and manage. Canteen staff are not IT nerds
 * Intermittened connections should not cause failures
