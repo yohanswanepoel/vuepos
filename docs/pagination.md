@@ -72,13 +72,13 @@ function query(startHere = ""){
 * Move the pointer in the array forward and back 1 element on the array
  
 ```javascript
-function previousPage(){
+function query(){
     // Move current page back 1
     current_page = current_page - 1;
     loadSales(page_start_keys[current_page - 1])
 }
 
-function nextPage(){
+function query(){
     // Move current page forward 1
     current_page++;
     loadSales(page_start_keys[current_page - 1])
