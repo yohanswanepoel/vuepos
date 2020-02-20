@@ -104,6 +104,7 @@ var app = new Vue({
         this.user = null;
         this.user_role = null;
         this.loggedIn = false;
+        this.$store.state.remoteDB.logOut();
         // @TODO Stop sync
         this.sync_down.cancel();
         this.$store.commit('updateUserInformation',null, null, false);

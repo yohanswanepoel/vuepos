@@ -14,7 +14,7 @@ export default {
           filterType: "Clear",
           total_rows: 0,
           result_total_size: 0, // total_rows - offset,
-          results_per_page: 5,
+          results_per_page: 15,
           current_page: 1,
           to_date: "",
           has_more_pages: false,
