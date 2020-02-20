@@ -14,7 +14,7 @@ export default {
           filterType: "Clear",
           total_rows: 0,
           result_total_size: 0, // total_rows - offset,
-          results_per_page: 15,
+          results_per_page: 5,
           current_page: 1,
           to_date: "",
           has_more_pages: false,
@@ -203,7 +203,11 @@ export default {
           endkey: ""+tDate+"\ufff0"
         }).then(function(result){
           if (result.rows.length > self.results_per_page){
-            self.page_start_keys.push(result.rows[self.results_per_page].key);
+            if (self.page_start_keys.length >= self.current_page){
+              self.page_start_keys[self.current_page] = result.rows[self.results_per_page].key;
+            }else{
+              self.page_start_keys.push(result.rows[self.results_per_page].key);
+            }
             result.rows.pop();
           }
           self.sales = result.rows;
