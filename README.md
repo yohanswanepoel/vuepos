@@ -133,9 +133,10 @@ Client-side
 * [Vuex session management](docs/vuex.md)
 * [Replication managed direction using filters and removing local copies](docs/replication.md)
 * [CouchDB logical "_id" fields](docs/logicalid.md)
-* Pagination using id fields and an array to keep track - pretty neat
+* [Pagination using id fields and an array](docs/pagination.md)
 * Views and Map/Reduce jobs in CouchDB
 * CouchDB authentication
 * Vue flow: Mounted, Created ect
 * Vue Computed Fields
 * Vue Filters
+* Couch/Pouch Database design patterns
