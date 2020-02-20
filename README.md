@@ -134,8 +134,8 @@ Client-side
 * [Replication managed direction using filters and removing local copies](docs/replication.md)
 * [CouchDB logical "_id" fields](docs/logicalid.md)
 * [Pagination using id fields and an array](docs/pagination.md)
+* [CouchDB authentication](docs/auth.md)
 * Views and Map/Reduce jobs in CouchDB
-* CouchDB authentication
 * Vue flow: Mounted, Created ect
 * Vue Computed Fields
 * Vue Filters
