@@ -140,3 +140,4 @@ Client-side
 * Vue Computed Fields
 * Vue Filters
 * Couch/Pouch Database design patterns
+* Progresive Web Apps
