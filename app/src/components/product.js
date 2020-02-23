@@ -147,7 +147,7 @@ export default {
         this.messages = []
       },
       cancel(){
-        window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/');
+        window.history.length > 1 ? this.$router.go(-2) : this.$router.push('/');
       },
       saveProduct(){
         var self = this;
