@@ -3,7 +3,9 @@ For this application the PWA allows me to do two things
 * Cache all the static content locally
 * Make the app installable as a desktop application
 
-For offical documentation see: https://codelabs.developers.google.com/codelabs/your-first-pwapp/#0
+## Documentation
+* Offical documentation: https://developers.google.com/web/ilt/pwa/introduction-to-progressive-web-app-architectures
+* Tutorial: https://codelabs.developers.google.com/codelabs/your-first-pwapp/#0
 
 ## Usage in the app
 For PWA's you require a manifest, service worker and a loaded service worker. This controlls replication and networking proxying for offline use. For debugging you can also disable the service workers.
@@ -58,3 +60,6 @@ The [Manifest](../manifest.json) file specifies components such as starting url 
     "theme_color": "white"
   }
 ```
+
+## TODO
+Reload new version of cache: https://deanhume.com/displaying-a-new-version-available-progressive-web-app/

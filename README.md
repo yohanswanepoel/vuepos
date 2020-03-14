@@ -140,4 +140,4 @@ Client-side
 * [Vue Computed Fields](https://vuejs.org/v2/guide/computed.html) - Official doco. Keep complex logic away from template.
 * [Vue Filters](https://vuejs.org/v2/guide/filters.html) - Official doco. Useful to format data
 * [Progresive Web Apps](docs/pwa.md) - Did this without special plugins
-* Couch/Pouch Database design patterns
+* [Couch/Pouch Database design thougts](docs/couchpouch.db)
