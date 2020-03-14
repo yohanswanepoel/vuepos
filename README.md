@@ -137,7 +137,7 @@ Client-side
 * [CouchDB authentication](docs/auth.md)
 * [Views and Map/Reduce jobs in CouchDB](docs/mapreduce.md)
 * [Vue Lifecycle: Mounted, Created ect](docs/vuelifecycle.md)
-* Vue Computed Fields
-* Vue Filters
+* [Vue Computed Fields](https://vuejs.org/v2/guide/computed.html) - Official doco. Keep complex logic away from template.
+* [Vue Filters](https://vuejs.org/v2/guide/filters.html) - Official doco. Useful to format data
 * Couch/Pouch Database design patterns
 * Progresive Web Apps
