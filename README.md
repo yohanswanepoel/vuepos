@@ -136,7 +136,7 @@ Client-side
 * [Pagination using id fields and an array](docs/pagination.md)
 * [CouchDB authentication](docs/auth.md)
 * [Views and Map/Reduce jobs in CouchDB](docs/mapreduce.md)
-* Vue flow: Mounted, Created ect
+* [Vue Lifecycle: Mounted, Created ect](docs/vuelifecycle.md)
 * Vue Computed Fields
 * Vue Filters
 * Couch/Pouch Database design patterns
