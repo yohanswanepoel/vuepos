@@ -19,6 +19,10 @@ The following design principles apply
 * Intermittened connections should not cause failures
 * Database backups should be seamless
 
+
+![Full Logical Model](images/vuepos_fulllogical.png "Full Logical Model")
+
+
 ## <a name="tech"></a>Technologies Used
 ### User Interface
 * Vue for the reactive web front-end capabilities
@@ -42,7 +46,6 @@ The following design principles apply
 ### Authentication
 * Couch DB authentication
 
-
 ## <a name="user"></a>User roles required
 * Role: pos: Use Point of Sale capability only
 * Role: admin: Can manage products, view sales and reports
@@ -60,6 +63,8 @@ The following design principles apply
 * Database: CouchDB - good tutorial: https://pouchdb.com/guides/setup-couchdb.html
 * Progressive Web Apps: A compatible browser
 * Web server: I used built in Python SimpleHTTPServer
+
+![Development Logical Model](images/vuepos_dev.png "Development Logical Model")
 
 ### User setup
 * Create 3 users
@@ -140,4 +145,4 @@ Client-side
 * [Vue Computed Fields](https://vuejs.org/v2/guide/computed.html) - Official doco. Keep complex logic away from template.
 * [Vue Filters](https://vuejs.org/v2/guide/filters.html) - Official doco. Useful to format data
 * [Progresive Web Apps](docs/pwa.md) - Did this without special plugins
-* [Couch/Pouch Database design thougts](docs/couchpouch.db)
+* [Couch/Pouch Database design thougts](docs/couchpouch.mb)
