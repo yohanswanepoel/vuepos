@@ -20,7 +20,7 @@ The following design principles apply
 * Database backups should be seamless
 
 
-![Full Logical Model](images/vuepos_fulllogical.png "Full Logical Model")
+![Full Logical Model](docs/images/vuepos_fulllogical.png "Full Logical Model")
 
 
 ## <a name="tech"></a>Technologies Used
@@ -64,7 +64,7 @@ The following design principles apply
 * Progressive Web Apps: A compatible browser
 * Web server: I used built in Python SimpleHTTPServer
 
-![Development Logical Model](images/vuepos_dev.png "Development Logical Model")
+![Development Logical Model](docs/images/vuepos_dev.png "Development Logical Model")
 
 ### User setup
 * Create 3 users
