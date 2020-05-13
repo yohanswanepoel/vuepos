@@ -159,6 +159,8 @@ var app = new Vue({
           for (i = 0; i < change.docs.length; i++){
             db.get(change.docs[i]._id).then(function(doc){
               db.remove(doc);
+            }).catch(function (err){
+              console.log(err)
             });
           }
           var date = new Date();
