@@ -89,6 +89,8 @@ var app = new Vue({
                 self.user_role = "admin";
               }else if(res.roles[x]=="pos" && self.user_role != "admin"){
                 self.user_role = "pos";
+              }else if(res.roles[x]=="superAdmin"){
+                self.user_role = "superAdmin";
               }
             }
             self.loggedIn = true;
