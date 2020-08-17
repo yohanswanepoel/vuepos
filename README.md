@@ -128,7 +128,7 @@ Client-side
 
 ## <a name="todo"></a>ToDo
 * Build out reports
-* Update app content through service workers for new versions
+* Update app content through service workers for new versions : need elegant cache rename approach
 * Build containerised pattern using Podman and Buildah
 * Build kubernetes files likely targetting OpenShift
 
