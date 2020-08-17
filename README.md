@@ -118,6 +118,10 @@ curl -u [user]:[password] http://localhost:5984/swanepos/_all_docs
 ```
 
 ## <a name="setupprod"></a>Production runtime options
+Currently there are Container build files for
+* CouchDB
+* Nginx 
+
 Options being considered
 * Couch-as-a-Service: GCP, IBM Cloud?, with a webserver to serve content
 * Couch, proxy/webserver (Candy) on a RaspberryPi with Wifi Hotspot
@@ -128,8 +132,8 @@ Client-side
 
 ## <a name="todo"></a>ToDo
 * Build out reports
-* Update app content through service workers for new versions : need elegant cache rename approach
-* Build containerised pattern using Podman and Buildah
+* Update app content through service workers for new versions : Nginx container script should do this
+* Build containerised pattern using Podman and Buildah - built, requires nginx configeration to link couchdb from app
 * Build kubernetes files likely targetting OpenShift
 
 ## <a name="lessons"></a>Interesting Lessons learned along the way
