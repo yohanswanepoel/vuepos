@@ -42,7 +42,7 @@ var app = new Vue({
         last_sync : "",
         user : null,
         password: null,
-        server: "localhost",
+        server: "http://localhost:8080/couchdb/swanepos",
         errors: [],
         messages: [],
         loggedIn: false,
@@ -73,8 +73,10 @@ var app = new Vue({
           this.errors.push("Specify server");
         }
         if (this.errors.length == 0){
-          this.remoteDbstr = "http://"+this.server+":5984/swanepos";
+          this.remoteDbstr = this.server;
+          console.log("before login")
           remoteDb = new PouchDB(this.remoteDbstr, {skip_setup: true});
+          console.log("after login")
           this.$store.state.remoteDB = remoteDb;
           this.$store.commit('updateRemoteDB',remoteDb);
           //

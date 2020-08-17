@@ -12,7 +12,7 @@ buildah bud -t nginx_pos -f Containerfile .
 
 Run
 ```bash
-podman run -d --name nginx_pos -p 8443:8443 -p 8080:8080 localhost/nginx_pos 
+podman run -d --name nginx_pos -p 8443:8443 -p 8080:8080 -e COUCHDB_HOST=[hostip] localhost/nginx_pos 
 ```
 
 Stop
