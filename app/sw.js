@@ -1,4 +1,4 @@
-var cacheName = 'pospwa_5';
+var cacheName = 'pospwa_6';
 
 var filesToCache = [
   '/',

@@ -5,7 +5,7 @@ import SaleViewComponent from './components/listsales.js';
 import ReportsComponent from './components/reports.js';
 
 import store from './components/vuexstate.js'
-import {formatDateForId, addReferenceData, createDatabaseViews, createSaleViews} from './helpers.js';
+import {formatDateForId, addReferenceData, createDatabaseViews, createSaleViews, createSaleItemViews} from './helpers.js';
 
 
 var db = new PouchDB('swanpos');
@@ -87,10 +87,10 @@ var app = new Vue({
             for (x = 0; x < res.roles.length; x++){
               if(res.roles[x]=="admin"){
                 self.user_role = "admin";
-              }else if(res.roles[x]=="pos" && self.user_role != "admin"){
-                self.user_role = "pos";
-              }else if(res.roles[x]=="superAdmin"){
+              }else if(res.roles[x]=="superAdmin" && self.user_role != "admin"){
                 self.user_role = "superAdmin";
+              }else if(res.roles[x]=="pos" && self.user_role != "admin" && self.user_role != "superAdmin"){
+                self.user_role = "pos";
               }
             }
             self.loggedIn = true;
