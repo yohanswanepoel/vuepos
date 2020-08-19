@@ -223,9 +223,7 @@ var app = new Vue({
     beforeCreate: function(){
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker
-                .register('./sw.js', {
-                  scope : '/'
-                });
+                .register('./sw.js');
       }
     }
 });

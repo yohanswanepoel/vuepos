@@ -8,16 +8,19 @@ fi
 
 if [ -z "$COUCHDB_HOST" ]
 then
-      $COUCHDB_HOST = localhost
+      COUCHDB_HOST = localhost
 fi
 
+CACHE_NAME=`date "+%s"`
 
 #Need new cache build here
 
 # Replace the resource paths in index yaml files to match the specified external URL
 find /opt/www/public -name '*.yaml' -exec sed -i -e "s|{{EXTERNAL_URL}}|${EXTERNAL_URL%/}|" {} \;
 
-find /etc/nginx -name *.conf -exec sed -i -e "s|{{COUCHDB_HOST}}|${COUCHDB_HOST}|" {} \;
+find /etc/nginx -name '*.conf' -exec sed -i -e "s|{{COUCHDB_HOST}}|${COUCHDB_HOST}|" {} \;
+
+find /opt/www/public -name 'sw.js' -exec sed -i -e "s|SPA_CACHE_NAME|${CACHE_NAME}|" {} \;
 
 
 # Replace the resource paths in index json files to match the specified external URL
