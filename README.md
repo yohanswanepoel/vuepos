@@ -175,8 +175,8 @@ Client-side
 
 ## <a name="todo"></a>ToDo
 * Build out reports
-* Update app content through service workers for new versions : Nginx container script should do this
-* Build containerised pattern using Podman and Buildah - built, requires nginx configeration to link couchdb from app
+* Build containerised pattern using Podman and Buildah - built
+* Build out skaffold or similar patterns for kubernetes
 * Build kubernetes files likely targetting OpenShift
 
 ## <a name="lessons"></a>Interesting Lessons learned along the way
