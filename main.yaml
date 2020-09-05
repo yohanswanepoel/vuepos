@@ -1,0 +1,113 @@
+---
+- name: Setup application
+  hosts: localhost
+  vars:
+    couchdb_container: vue-couchdb
+    pos_container: nginx_pos
+
+  tasks:
+
+    - name: Include variables
+      include_vars:
+        file: variables.yaml
+
+    - name: Create and start couchdb container
+      command: podman run -d --name {{ couchdb_container }} -p 5984:5984 -e COUCHDB_USER={{ couchdb_admin_user }} -e COUCHDB_PASSWORD={{ couchdb_admin_password }} localhost/couchdb  
+      
+      tags:
+        - create_couch
+    
+    - name: Start couchdb container
+      command: podman start {{ couchdb_container }}
+      
+      tags:
+        - start_couch
+        - start_all
+
+    - name: Stop couchdb container
+      command: podman stop {{ couchdb_container }}
+      
+      tags:
+        - stop_couch
+        - stop_all
+        - clean
+    
+    - name: Remove couchdb container
+      command: podman rm {{ couchdb_container }}
+      
+      tags:
+        - remove_couch
+        - clean
+    
+    - name: Stop frontend container
+      command: podman stop {{ pos_container }}
+      
+      tags:
+        - stop_pos
+        - rebuild_pos
+        - stop_all
+        - clean
+
+    - name: Remove frontend container
+      command: podman rm {{ pos_container }}
+      
+      tags:
+        - remove_pos 
+        - rebuild_pos
+        - restart_pos
+        - clean
+
+    - name: Remove web app container
+      podman_image:
+        name: localhost/nginx_pos
+        state: absent
+
+      tags:
+        - remove_pos_image
+        - clean
+        - rebuild_pos
+
+    - name: Build web app container
+      podman_image:
+        name: nginx_pos
+        path: app/
+        build:
+          format: docker
+      
+      tags:
+        - build_pos_image
+        - rebuild_pos
+
+    - name: Create and start frontend container
+      command: podman run -d --name {{ pos_container }} -p 8443:8443 -p 8080:8080 -e COUCHDB_HOST={{ host_ip }} localhost/nginx_pos   
+      
+      tags:
+        - create_pos
+        - rebuild_pos
+        - restart_pos
+    
+    - name: Start frontend container
+      command: podman start {{ pos_container }}
+      
+      tags:
+        - start_pos
+        - start_all
+
+    - name: Remove couchdb container
+      podman_image:
+        name: localhost/couchdb
+        state: absent
+
+      tags:
+        - remove_couch_image
+        - clean
+    
+    - name: Build couchdb container
+      podman_image:
+        name: couchdb
+        path: couchdb_container
+        build:
+          format: docker
+      
+      tags:
+        - build_couch_image

@@ -1,0 +1,4 @@
+host_ip: xxx.xxx.xxx.xxx
+couchdb_admin_user: yourdbadminuser
+couchdb_admin_password: yourdbadminpassword
+couchdb_volume: /home/somwhere/data

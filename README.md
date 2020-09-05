@@ -85,6 +85,56 @@ podman run -d --pod devpod --name nginx_pos -p 8443:8443 -p 8080:8080 localhost/
 
 ```
 
+### Super quickstart - Ansible
+You can use Ansible for a super quick start
+
+Create a variables.yaml file by copying sample_variables.yaml and set:
+* host_ip: xxx.xxx.xxx.xxx
+* couchdb_admin_user: yourusername
+* couchdb_admin_password: yourpassword
+* couchdb_volume: storecouchdbdatahere
+
+Build the containers
+```bash
+# Build database
+ansible-playbook main.yaml --tags "build_couch_image"
+
+# Build the frontend
+ansible-playbook main.yaml --tags "build_pos_image"
+
+```
+
+Start app for the first time
+```bash
+# Start database
+ansible-playbook main.yaml --tags "create_couch"
+
+# Start the frontend
+ansible-playbook main.yaml --tags "create_pos"
+```
+
+Stop all
+```bash
+ansible-playbook main.yaml --tags "stop_all"
+```
+
+Start all
+```bash
+ansible-playbook main.yaml --tags "start_all"
+
+```
+
+Rebuild and redeploy pos Image
+```bash
+ansible-playbook main.yaml --tags "rebuild_pos"
+```
+
+Remove container and images from your setup
+```bash
+ansible-playbook main.yaml --tags "clean"
+```
+
+
 ![Development Logical Model](docs/images/vuepos_dev.png "Development Logical Model")
 
 ### User setup
