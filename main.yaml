@@ -10,22 +10,30 @@
     - name: Include variables
       include_vars:
         file: variables.yaml
-
-    - name: Create and start couchdb container
-      command: podman run -d --name {{ couchdb_container }} -p 5984:5984 -e COUCHDB_USER={{ couchdb_admin_user }} -e COUCHDB_PASSWORD={{ couchdb_admin_password }} localhost/couchdb  
       
       tags:
-        - create_couch
-    
+        - import_vars
+
     - name: Start couchdb container
-      command: podman start {{ couchdb_container }}
-      
+      containers.podman.podman_container:
+        name: "{{ couchdb_container }}"
+        image: localhost/couchdb
+        state: started
+        restart: yes
+        ports:
+          - "5984:5984"
+        env:
+          COUCHDB_USER="{{ couchdb_admin_user }}"
+          COUCHDB_PASSWORD="{{ couchdb_admin_password }}"
+
       tags:
         - start_couch
         - start_all
 
     - name: Stop couchdb container
-      command: podman stop {{ couchdb_container }}
+      containers.podman.podman_container:
+        name: "{{ couchdb_container }}"
+        state: stopped
       
       tags:
         - stop_couch
@@ -33,14 +41,18 @@
         - clean
     
     - name: Remove couchdb container
-      command: podman rm {{ couchdb_container }}
+      containers.podman.podman_container:
+        name: "{{ couchdb_container }}"
+        state: absent
       
       tags:
         - remove_couch
         - clean
     
     - name: Stop frontend container
-      command: podman stop {{ pos_container }}
+      containers.podman.podman_container:
+        name: "{{ pos_container }}"
+        state: stopped
       
       tags:
         - stop_pos
@@ -49,7 +61,9 @@
         - clean
 
     - name: Remove frontend container
-      command: podman rm {{ pos_container }}
+      containers.podman.podman_container:
+        name: "{{ pos_container }}"
+        state: absent
       
       tags:
         - remove_pos 
@@ -78,18 +92,21 @@
         - build_pos_image
         - rebuild_pos
 
-    - name: Create and start frontend container
-      command: podman run -d --name {{ pos_container }} -p 8443:8443 -p 8080:8080 -e COUCHDB_HOST={{ host_ip }} localhost/nginx_pos   
-      
+    - name: Create/start frontend container
+      containers.podman.podman_container:
+        name: "{{ pos_container }}"
+        image: localhost/nginx_pos
+        state: started
+        restart: yes
+        ports:
+          - "8443:8443"
+          - "8080:8080"
+        env:
+          COUCHDB_HOST="{{ host_ip }}"
+
       tags:
-        - create_pos
         - rebuild_pos
         - restart_pos
-    
-    - name: Start frontend container
-      command: podman start {{ pos_container }}
-      
-      tags:
         - start_pos
         - start_all
 

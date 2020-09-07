@@ -94,44 +94,50 @@ Create a variables.yaml file by copying sample_variables.yaml and set:
 * couchdb_admin_password: yourpassword
 * couchdb_volume: storecouchdbdatahere
 
-Build the containers
+Install: containers.podman ansible collection
 ```bash
-# Build database
-ansible-playbook main.yaml --tags "build_couch_image"
-
-# Build the frontend
-ansible-playbook main.yaml --tags "build_pos_image"
+ansible-galaxy collection install containers.podman
 
 ```
 
-Start app for the first time
+Build the containers
+```bash
+# Build database
+ansible-playbook main.yaml --tags "import_vars, build_couch_image"
+
+# Build the frontend
+ansible-playbook main.yaml --tags "import_vars, build_pos_image"
+
+```
+
+Start app components independently
 ```bash
 # Start database
-ansible-playbook main.yaml --tags "create_couch"
+ansible-playbook main.yaml --tags "import_vars, create_couch"
 
 # Start the frontend
-ansible-playbook main.yaml --tags "create_pos"
+ansible-playbook main.yaml --tags "import_vars, create_pos"
 ```
 
 Stop all
 ```bash
-ansible-playbook main.yaml --tags "stop_all"
+ansible-playbook main.yaml --tags "import_vars, stop_all"
 ```
 
 Start all
 ```bash
-ansible-playbook main.yaml --tags "start_all"
+ansible-playbook main.yaml --tags "import_vars, start_all"
 
 ```
 
 Rebuild and redeploy pos Image
 ```bash
-ansible-playbook main.yaml --tags "rebuild_pos"
+ansible-playbook main.yaml --tags "import_vars, rebuild_pos"
 ```
 
 Remove container and images from your setup
 ```bash
-ansible-playbook main.yaml --tags "clean"
+ansible-playbook main.yaml --tags "import_vars, clean"
 ```
 
 
